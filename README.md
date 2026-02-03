@@ -46,6 +46,8 @@ If required, a Docker image can be created with the Spring Boot plugin. Add `SPR
 gradlew bootBuildImage --imageName=com.aiw/backend
 ```
 
+
+
 ## Further readings
 
 * [Gradle user manual](https://docs.gradle.org/)  
