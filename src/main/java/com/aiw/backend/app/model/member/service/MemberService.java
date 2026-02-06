@@ -2,7 +2,7 @@ package com.aiw.backend.app.model.member.service;
 
 import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.member.domain.Member;
-import com.aiw.backend.app.model.member.model.MemberDTO;
+import com.aiw.backend.app.model.member.dto.MemberDTO;
 import com.aiw.backend.app.model.member.repository.MemberRepository;
 import com.aiw.backend.util.CustomCollectors;
 import com.aiw.backend.util.NotFoundException;

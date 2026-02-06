@@ -5,7 +5,7 @@ import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
 import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
 import com.aiw.backend.app.model.meeting_participant.domain.MeetingParticipant;
-import com.aiw.backend.app.model.meeting_participant.model.MeetingParticipantDTO;
+import com.aiw.backend.app.model.meeting_participant.dto.MeetingParticipantDTO;
 import com.aiw.backend.app.model.meeting_participant.repository.MeetingParticipantRepository;
 import com.aiw.backend.app.model.member.domain.Member;
 import com.aiw.backend.app.model.member.repository.MemberRepository;

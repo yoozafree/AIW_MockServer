@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.mypage.controller;
 
-import com.aiw.backend.app.model.member.model.MemberDTO;
+import com.aiw.backend.app.model.member.dto.MemberDTO;
 import com.aiw.backend.app.model.member.service.MemberService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

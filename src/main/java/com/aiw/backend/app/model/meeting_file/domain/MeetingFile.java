@@ -27,39 +27,42 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class MeetingFile {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String fileType;
+  @Column(nullable = false)
+  private String fileType;
 
-    @Column(nullable = false, unique = true)
-    private String originalFilename;
+  @Column(nullable = false, unique = true)
+  private String originalFilename;
 
-    @Column(nullable = false, unique = true)
-    private String storageUrl;
+  @Column(nullable = false, unique = true)
+  private String storageUrl;
 
-    @Column
-    private Long durationSec;
+  @Column(nullable = false)
+  private Long durationSec;
 
-    @Column(nullable = false)
-    private LocalDateTime uploadedAt;
+  @Column(nullable = false)
+  private LocalDateTime uploadedAt;
 
-    @Column(nullable = false)
-    private LocalDateTime recordedAt;
+  @Column(nullable = false)
+  private LocalDateTime recordedAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_id", nullable = false, unique = true)
-    private Meeting meeting;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "meeting_id", nullable = false, unique = true)
+  private Meeting meeting;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime dateCreated;
+
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdated;
 
 }

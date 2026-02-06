@@ -26,39 +26,42 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class SttState {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String state;
+  @Column(nullable = false)
+  private String state;
 
-    @Column(nullable = false)
-    private String language;
+  @Column(nullable = false)
+  private String language;
 
-    @Column(nullable = false, unique = true)
-    private String rawJsonUrl;
+  @Column(nullable = false, unique = true)
+  private String rawJsonUrl;
 
-    @Column(nullable = false)
-    private String startedAt;
+  @Column(nullable = false)
+  private String startedAt;
 
-    @Column(nullable = false)
-    private String endAt;
+  @Column(nullable = false)
+  private String endedAt;
 
-    @Column(nullable = false, columnDefinition = "longtext")
-    private String errorMessage;
+  @Column(nullable = false, columnDefinition = "longtext")
+  private String errorMessage;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_id", nullable = false, unique = true)
-    private Meeting meeting;
+  @Column(columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "meeting_id", nullable = false, unique = true)
+  private Meeting meeting;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime dateCreated;
+
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdated;
 
 }

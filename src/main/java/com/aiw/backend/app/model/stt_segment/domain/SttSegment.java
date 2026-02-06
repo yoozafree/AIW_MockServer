@@ -26,33 +26,36 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class SttSegment {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String speakerLabel;
+  @Column(nullable = false)
+  private String speakerLabel;
 
-    @Column(nullable = false)
-    private String startMs;
+  @Column(nullable = false)
+  private String startMs;
 
-    @Column(nullable = false)
-    private String endMs;
+  @Column(nullable = false)
+  private String endMs;
 
-    @Column(nullable = false, unique = true, columnDefinition = "longtext")
-    private String segText;
+  @Column(nullable = false, unique = true, columnDefinition = "longtext")
+  private String segText;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_speaker_map_id", nullable = false)
-    private MeetingSpeakerMap meetingSpeakerMap;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "meeting_speaker_map_id", nullable = false)
+  private MeetingSpeakerMap meetingSpeakerMap;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime dateCreated;
+
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdated;
 
 }

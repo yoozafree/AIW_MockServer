@@ -1,6 +1,6 @@
 package com.aiw.backend.app.model.team.rest;
 
-import com.aiw.backend.app.model.team.model.TeamDTO;
+import com.aiw.backend.app.model.team.dto.TeamDTO;
 import com.aiw.backend.app.model.team.service.TeamService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

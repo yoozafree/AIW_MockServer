@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.stt.controller;
 
-import com.aiw.backend.app.model.stt_state.model.SttStateDTO;
+import com.aiw.backend.app.model.stt_state.dto.SttStateDTO;
 import com.aiw.backend.app.model.stt_state.service.SttStateService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

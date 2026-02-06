@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.meeting.controller;
 
-import com.aiw.backend.app.model.meeting_speaker_map.model.MeetingSpeakerMapDTO;
+import com.aiw.backend.app.model.meeting_speaker_map.dto.MeetingSpeakerMapDTO;
 import com.aiw.backend.app.model.meeting_speaker_map.service.MeetingSpeakerMapService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

@@ -5,7 +5,7 @@ import com.aiw.backend.events.BeforeDeleteMeetingSpeakerMap;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
 import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
 import com.aiw.backend.app.model.meeting_speaker_map.domain.MeetingSpeakerMap;
-import com.aiw.backend.app.model.meeting_speaker_map.model.MeetingSpeakerMapDTO;
+import com.aiw.backend.app.model.meeting_speaker_map.dto.MeetingSpeakerMapDTO;
 import com.aiw.backend.app.model.meeting_speaker_map.repository.MeetingSpeakerMapRepository;
 import com.aiw.backend.util.CustomCollectors;
 import com.aiw.backend.util.NotFoundException;

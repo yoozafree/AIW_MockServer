@@ -1,7 +1,7 @@
 package com.aiw.backend.app.model.file.service;
 
 import com.aiw.backend.app.model.file.domain.FileContent;
-import com.aiw.backend.app.model.file.model.FileData;
+import com.aiw.backend.app.model.file.dto.FileData;
 import com.aiw.backend.app.model.file.repos.FileContentRepository;
 import com.aiw.backend.util.NotFoundException;
 import java.io.File;

@@ -4,7 +4,7 @@ import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
 import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
 import com.aiw.backend.app.model.stt_state.domain.SttState;
-import com.aiw.backend.app.model.stt_state.model.SttStateDTO;
+import com.aiw.backend.app.model.stt_state.dto.SttStateDTO;
 import com.aiw.backend.app.model.stt_state.repos.SttStateRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;
@@ -64,8 +64,9 @@ public class SttStateService {
         sttStateDTO.setLanguage(sttState.getLanguage());
         sttStateDTO.setRawJsonUrl(sttState.getRawJsonUrl());
         sttStateDTO.setStartedAt(sttState.getStartedAt());
-        sttStateDTO.setEndAt(sttState.getEndAt());
+        sttStateDTO.setEndedAt(sttState.getEndedAt());
         sttStateDTO.setErrorMessage(sttState.getErrorMessage());
+        sttStateDTO.setActivated(sttState.getActivated());
         sttStateDTO.setMeeting(sttState.getMeeting() == null ? null : sttState.getMeeting().getId());
         return sttStateDTO;
     }
@@ -75,8 +76,9 @@ public class SttStateService {
         sttState.setLanguage(sttStateDTO.getLanguage());
         sttState.setRawJsonUrl(sttStateDTO.getRawJsonUrl());
         sttState.setStartedAt(sttStateDTO.getStartedAt());
-        sttState.setEndAt(sttStateDTO.getEndAt());
+        sttState.setEndedAt(sttStateDTO.getEndedAt());
         sttState.setErrorMessage(sttStateDTO.getErrorMessage());
+        sttState.setActivated(sttStateDTO.getActivated());
         final Meeting meeting = sttStateDTO.getMeeting() == null ? null : meetingRepository.findById(sttStateDTO.getMeeting())
                 .orElseThrow(() -> new NotFoundException("meeting not found"));
         sttState.setMeeting(meeting);

@@ -26,33 +26,33 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class MeetingSummary {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String summaryTitle;
+  @Column(nullable = false)
+  private String summaryTitle;
 
-    @Column(nullable = false, unique = true, columnDefinition = "longtext")
-    private String summaryText;
+  @Column(nullable = false, unique = true)
+  private String keyDecision;
 
-    @Column(columnDefinition = "tinyint", length = 1)
-    private Boolean activated;
+  @Column(nullable = false, unique = true, columnDefinition = "longtext")
+  private String summaryText;
 
-    @Column(nullable = false, unique = true)
-    private String keyDecision;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_id", nullable = false, unique = true)
-    private Meeting meeting;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "meeting_id", nullable = false, unique = true)
+  private Meeting meeting;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime dateCreated;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdated;
 
 }

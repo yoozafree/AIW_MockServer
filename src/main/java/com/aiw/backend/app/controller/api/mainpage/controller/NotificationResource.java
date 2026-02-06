@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.mainpage.controller;
 
-import com.aiw.backend.app.model.notification.model.NotificationDTO;
+import com.aiw.backend.app.model.notification.dto.NotificationDTO;
 import com.aiw.backend.app.model.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
