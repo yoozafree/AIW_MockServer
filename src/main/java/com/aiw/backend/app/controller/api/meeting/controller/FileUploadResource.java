@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.meeting.controller;
 
-import com.aiw.backend.app.model.file.model.FileData;
+import com.aiw.backend.app.model.file.dto.FileData;
 import com.aiw.backend.app.model.file.service.FileDataService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

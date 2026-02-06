@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.team.controller;
 
-import com.aiw.backend.app.model.team_member.model.TeamMemberDTO;
+import com.aiw.backend.app.model.team_member.dto.TeamMemberDTO;
 import com.aiw.backend.app.model.team_member.service.TeamMemberService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

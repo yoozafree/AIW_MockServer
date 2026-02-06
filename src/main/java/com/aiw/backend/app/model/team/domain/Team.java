@@ -22,26 +22,26 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class Team {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column
-    private String name;
+  @Column
+  private String name;
 
-    @Column
-    private String inviteCode;
+  @Column
+  private String inviteCode;
 
-    @Column(columnDefinition = "tinyint", length = 1)
-    private Boolean activated;
+  @Column(columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime dateCreated;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdated;
 
 }

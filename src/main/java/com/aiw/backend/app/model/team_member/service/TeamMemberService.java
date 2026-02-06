@@ -7,7 +7,7 @@ import com.aiw.backend.app.model.member.repository.MemberRepository;
 import com.aiw.backend.app.model.team.domain.Team;
 import com.aiw.backend.app.model.team.repos.TeamRepository;
 import com.aiw.backend.app.model.team_member.domain.TeamMember;
-import com.aiw.backend.app.model.team_member.model.TeamMemberDTO;
+import com.aiw.backend.app.model.team_member.dto.TeamMemberDTO;
 import com.aiw.backend.app.model.team_member.repos.TeamMemberRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;

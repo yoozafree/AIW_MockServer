@@ -4,7 +4,7 @@ import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
 import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
 import com.aiw.backend.app.model.meeting_file.domain.MeetingFile;
-import com.aiw.backend.app.model.meeting_file.model.MeetingFileDTO;
+import com.aiw.backend.app.model.meeting_file.dto.MeetingFileDTO;
 import com.aiw.backend.app.model.meeting_file.repository.MeetingFileRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;

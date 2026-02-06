@@ -2,7 +2,7 @@ package com.aiw.backend.app.model.team.service;
 
 import com.aiw.backend.events.BeforeDeleteTeam;
 import com.aiw.backend.app.model.team.domain.Team;
-import com.aiw.backend.app.model.team.model.TeamDTO;
+import com.aiw.backend.app.model.team.dto.TeamDTO;
 import com.aiw.backend.app.model.team.repos.TeamRepository;
 import com.aiw.backend.util.CustomCollectors;
 import com.aiw.backend.util.NotFoundException;

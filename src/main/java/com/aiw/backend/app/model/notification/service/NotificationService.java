@@ -4,7 +4,7 @@ import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.member.domain.Member;
 import com.aiw.backend.app.model.member.repository.MemberRepository;
 import com.aiw.backend.app.model.notification.domain.Notification;
-import com.aiw.backend.app.model.notification.model.NotificationDTO;
+import com.aiw.backend.app.model.notification.dto.NotificationDTO;
 import com.aiw.backend.app.model.notification.repository.NotificationRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;

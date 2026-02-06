@@ -23,35 +23,38 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class Meeting {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String agenda;
+  @Column(nullable = false)
+  private String agenda;
 
-    @Column(nullable = false)
-    private LocalDateTime schduledAt;
+  @Column(nullable = false)
+  private LocalDateTime schduledAt;
 
-    @Column(nullable = false)
-    private LocalDateTime startedAt;
+  @Column(nullable = false)
+  private LocalDateTime startedAt;
 
-    @Column(nullable = false)
-    private LocalDateTime endedAt;
+  @Column(nullable = false)
+  private LocalDateTime endedAt;
 
-    @Column(nullable = false)
-    private String status;
+  @Column(nullable = false)
+  private String status;
 
-    @Column(nullable = false, columnDefinition = "tinyint", length = 1)
-    private Boolean activated;
+  @Column(nullable = false)
+  private String createdType;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime dateCreated;
+
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdated;
 
 }
