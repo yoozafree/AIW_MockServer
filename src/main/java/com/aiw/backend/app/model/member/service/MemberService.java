@@ -1,5 +1,7 @@
 package com.aiw.backend.app.model.member.service;
 
+import com.aiw.backend.app.model.member.model.ModifyMemberInfoRequest;
+import com.aiw.backend.app.model.member.model.ShowMemberInfoResponse;
 import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.member.domain.Member;
 import com.aiw.backend.app.model.member.model.MemberDTO;
@@ -11,6 +13,7 @@ import java.util.Map;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -89,6 +92,41 @@ public class MemberService {
         return memberRepository.findAll(Sort.by("id"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(Member::getId, Member::getProvider));
+    }
+
+    //마이페이지 내 정보 조회
+    @Transactional(readOnly = true)
+    public ShowMemberInfoResponse getShowInfo(final Long id) {
+        return memberRepository.findById(id)
+                .map(this::mapToShowResponse) // 전용 매핑 메서드 사용
+                .orElseThrow(NotFoundException::new);
+    }
+    //마이페이지 내 정보 수정
+    @Transactional
+    public void updateMyInfo(final Long id, final ModifyMemberInfoRequest modifyRequest) {
+        final Member member = memberRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        // 필요한 필드만 선택적으로 수정
+        mapModifyRequestToEntity(modifyRequest, member);
+
+        memberRepository.save(member);
+    }
+
+    private ShowMemberInfoResponse mapToShowResponse(final Member member) {
+        final ShowMemberInfoResponse response = new ShowMemberInfoResponse();
+        // 클라이언트에게 보여줄 정보만 매핑
+        response.setEmail(member.getEmail());
+        response.setName(member.getName());
+        response.setInterestedField(member.getInterestedField());
+        response.setProvider(member.getProvider());
+        return response;
+    }
+
+    private void mapModifyRequestToEntity(final ModifyMemberInfoRequest request, final Member member) {
+        // 수정 가능한 필드만 엔티티에 반영
+        member.setName(request.getName());
+        member.setInterestedField(request.getInterestedField());
     }
 
 }

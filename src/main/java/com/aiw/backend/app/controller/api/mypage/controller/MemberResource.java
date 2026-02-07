@@ -1,6 +1,9 @@
 package com.aiw.backend.app.controller.api.mypage.controller;
 
 import com.aiw.backend.app.model.member.model.MemberDTO;
+import com.aiw.backend.app.model.member.model.ModifyMemberInfoRequest;
+import com.aiw.backend.app.model.member.model.ModifyMemberInfoResponse;
+import com.aiw.backend.app.model.member.model.ShowMemberInfoResponse;
 import com.aiw.backend.app.model.member.service.MemberService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -57,6 +60,21 @@ public class MemberResource {
     public ResponseEntity<Void> deleteMember(@PathVariable(name = "id") final Long id) {
         memberService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ShowMemberInfoResponse> getMyInfo() {
+        Long currentMemberId = 1L;
+        return ResponseEntity.ok(memberService.getShowInfo(currentMemberId));
+    }
+
+    @PostMapping("/me")
+    public ResponseEntity<ModifyMemberInfoResponse> modifyMyInfo(
+            @RequestBody @Valid final ModifyMemberInfoRequest modifyRequest) {
+        Long currentMemberId = 1L;
+        memberService.updateMyInfo(currentMemberId, modifyRequest);
+
+        return ResponseEntity.ok(new ModifyMemberInfoResponse("Success"));
     }
 
 }
