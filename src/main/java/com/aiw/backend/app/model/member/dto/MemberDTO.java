@@ -2,12 +2,14 @@ package com.aiw.backend.app.model.member.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberDTO {
 
     private Long id;
@@ -31,5 +33,8 @@ public class MemberDTO {
 
     @NotNull
     private Boolean activated;
+
+    //ModifyMemberInfo 완료 후 성공 메세지
+    private String message;
 
 }

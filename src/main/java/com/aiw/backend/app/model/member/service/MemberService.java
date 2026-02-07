@@ -58,6 +58,24 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
+    //마이페이지 전용: 내 정보 조회
+    public MemberDTO getShowInfo(final Long id) {
+        return memberRepository.findById(id)
+                .map(member -> mapToDTO(member, new MemberDTO()))
+                .orElseThrow(NotFoundException::new);
+    }
+
+    //마이페이지 전용: 내 정보 수정
+    public void updateMyInfo(final Long id, final MemberDTO memberDTO) {
+        final Member member = memberRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        // 마이페이지 수정 가능 필드만 매핑
+        mapMyInfoToEntity(memberDTO, member);
+
+        memberRepository.save(member);
+    }
+
     private MemberDTO mapToDTO(final Member member, final MemberDTO memberDTO) {
         memberDTO.setId(member.getId());
         memberDTO.setProvider(member.getProvider());
@@ -77,6 +95,14 @@ public class MemberService {
         return member;
     }
 
+    //마이페이지 수정용 매핑: 이름 관심분야 업데이트
+    private Member mapMyInfoToEntity(final MemberDTO memberDTO, final Member member) {
+        // 이메일이나 프로바이더는 보안상 마이페이지에서 수정하지 않는 경우가 많으므로 선택적 매핑
+        member.setName(memberDTO.getName());
+        member.setInterestedField(memberDTO.getInterestedField());
+        return member;
+    }
+
     public boolean emailExists(final String email) {
         return memberRepository.existsByEmailIgnoreCase(email);
     }
@@ -90,5 +116,8 @@ public class MemberService {
                 .stream()
                 .collect(CustomCollectors.toSortedMap(Member::getId, Member::getProvider));
     }
+
+
+
 
 }
