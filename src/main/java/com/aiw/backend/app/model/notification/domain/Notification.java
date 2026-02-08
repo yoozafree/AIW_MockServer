@@ -46,4 +46,14 @@ public class Notification {
   @Column(nullable = false)
   private OffsetDateTime lastUpdated;
 
+  //마이페이지 알림 설정 필드 추가
+  @Column
+  private Boolean meetingAlarm = true; // 기본값 설정
+
+  @Column
+  private Boolean deadlineAlarm = true;
+
+  @Column
+  private Boolean allAlarm = true;
+
 }
