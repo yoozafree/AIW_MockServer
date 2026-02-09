@@ -1,12 +1,8 @@
 package com.aiw.backend.app.model.team.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.aiw.backend.app.model.member.domain.Member;
+import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,5 +39,15 @@ public class Team {
   @LastModifiedDate
   @Column(nullable = false)
   private OffsetDateTime lastUpdated;
+
+  //팀장 정보
+  //팀장 권한 넘겨주기 기능
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "leader_id")
+  private Member leader;
+
+  //팀 설명
+  @Column(columnDefinition = "text")
+  private String description;
 
 }
