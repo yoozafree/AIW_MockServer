@@ -67,10 +67,10 @@ public class ActionItem {
 
   @CreatedDate
   @Column(nullable = false, updatable = false)
-  private OffsetDateTime dateCreated;
+  private OffsetDateTime createdAt;
 
   @LastModifiedDate
   @Column(nullable = false)
-  private OffsetDateTime lastUpdated;
+  private OffsetDateTime lastUpdatedAt;
 
 }

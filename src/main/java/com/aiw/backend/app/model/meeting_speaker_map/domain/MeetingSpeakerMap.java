@@ -26,24 +26,29 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class MeetingSpeakerMap {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  private String id;
 
-    @Column(nullable = false)
-    private String speakerLabel;
+  @Column(nullable = false, length = 20)
+  private String speakerLabel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_id", nullable = false)
-    private Meeting meeting;
+  @Column(nullable = false)
+  private String meetingId;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "meeting_id", nullable = false)
+  private Meeting meeting;
+
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime createdAt;
+
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdatedAt;
 
 }

@@ -10,13 +10,22 @@ import lombok.Setter;
 @Setter
 public class MeetingSpeakerMapDTO {
 
-    private Long id;
+  @Size(max = 255)
+  @MeetingSpeakerMapIdValid
+  private String id;
 
-    @NotNull
-    @Size(max = 255)
-    private String speakerLabel;
+  @NotNull
+  @Size(max = 20)
+  private String speakerLabel;
 
-    @NotNull
-    private Long meeting;
+  @NotNull
+  @Size(max = 255)
+  private String meetingId;
+
+  private Boolean activated;
+
+  @NotNull
+  private Long meeting;
+
 
 }

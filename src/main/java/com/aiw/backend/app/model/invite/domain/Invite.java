@@ -41,16 +41,19 @@ public class Invite {
   @Column
   private LocalDateTime revokedAt;
 
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "team_id", nullable = false)
   private Team team;
 
   @CreatedDate
   @Column(nullable = false, updatable = false)
-  private OffsetDateTime dateCreated;
+  private OffsetDateTime createdAt;
 
   @LastModifiedDate
   @Column(nullable = false)
-  private OffsetDateTime lastUpdated;
+  private OffsetDateTime lastUpdatedAt;
 
 }
