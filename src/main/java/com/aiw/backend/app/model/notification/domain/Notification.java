@@ -34,17 +34,23 @@ public class Notification {
   @Column(nullable = false, columnDefinition = "longtext")
   private String message;
 
+  @Column(nullable = false)
+  private String type;
+
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
   @CreatedDate
   @Column(nullable = false, updatable = false)
-  private OffsetDateTime dateCreated;
+  private OffsetDateTime createdAt;
 
   @LastModifiedDate
   @Column(nullable = false)
-  private OffsetDateTime lastUpdated;
+  private OffsetDateTime lastUpdatedAt;
 
   //마이페이지 알림 설정 필드 추가
   @Column

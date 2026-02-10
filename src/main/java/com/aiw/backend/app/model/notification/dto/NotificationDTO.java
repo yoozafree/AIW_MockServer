@@ -17,6 +17,9 @@ public class NotificationDTO {
     private String message;
 
     @NotNull
+    private Boolean activated;
+
+    @NotNull
     private Long member;
 
     //마이페이지 알림 기능 구현

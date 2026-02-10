@@ -23,6 +23,9 @@ public class InviteDTO {
   private LocalDateTime revokedAt;
 
   @NotNull
+  private Boolean activated;
+
+  @NotNull
   private Long team;
 
 }
