@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/invites", produces = MediaType.APPLICATION_JSON_VALUE)
-public class InviteResource {
+public class InviteController {
 
     private final InviteService inviteService;
 
-    public InviteResource(final InviteService inviteService) {
+    public InviteController(final InviteService inviteService) {
         this.inviteService = inviteService;
     }
 
