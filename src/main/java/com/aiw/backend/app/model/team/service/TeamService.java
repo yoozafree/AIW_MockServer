@@ -62,15 +62,15 @@ public class TeamService {
         final Team savedTeam = teamRepository.save(team);
 
         // 3. 생성자(현재 로그인 유저)를 TeamMember로 등록
-        // 현재는 인증 로직 전이므로 테스트용으로 1L 사용 (추후 Security 적용 시 변경)
-        final Long currentMemberId = 2L;
+        final Long currentMemberId = teamDTO.getLeaderId();
+
         final Member creator = memberRepository.findById(currentMemberId)
-                .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다. (ID: " + currentMemberId + ")"));
 
         final TeamMember teamMember = new TeamMember();
         teamMember.setMember(creator);
         teamMember.setTeam(savedTeam);
-        teamMember.setRole("LEADER"); // 팀장 역할 부여
+        teamMember.setRole("LEADER");
         teamMember.setActivated(true);
 
         teamMemberRepository.save(teamMember);

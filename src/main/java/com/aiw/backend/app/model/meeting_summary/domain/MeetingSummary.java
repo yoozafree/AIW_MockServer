@@ -34,10 +34,10 @@ public class MeetingSummary {
   @Column(nullable = false)
   private String summaryTitle;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String keyDecision;
 
-  @Column(nullable = false, unique = true, columnDefinition = "longtext")
+  @Column(nullable = false, columnDefinition = "longtext")
   private String summaryText;
 
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)

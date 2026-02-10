@@ -40,7 +40,7 @@ public class SttSegment {
   @Column(nullable = false)
   private String endMs;
 
-  @Column(nullable = false, unique = true, columnDefinition = "longtext")
+  @Column(nullable = false, columnDefinition = "longtext")
   private String segText;
 
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)
