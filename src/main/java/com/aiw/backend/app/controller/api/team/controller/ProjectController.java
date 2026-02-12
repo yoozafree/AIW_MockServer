@@ -20,9 +20,9 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Long>> createProject(@RequestBody @Valid final ProjectDTO projectDTO) {
-        final Long createdId = projectService.create(projectDTO);
-        return new ResponseEntity<>(Map.of("id", createdId), HttpStatus.CREATED);
+    public ResponseEntity<ProjectDTO> createProject(@RequestBody @Valid final ProjectDTO projectDTO) {
+        final ProjectDTO createdProject = projectService.create(projectDTO);
+        return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
     }
 
     //조회

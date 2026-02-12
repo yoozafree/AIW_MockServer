@@ -29,7 +29,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public Long create(final ProjectDTO projectDTO) {
+    public ProjectDTO create(final ProjectDTO projectDTO) {
         final Project project = new Project();
 
         // 1. 팀 존재 여부 확인
@@ -42,7 +42,11 @@ public class ProjectService {
         project.setTeam(team);
         project.setActivated(true);
 
-        return projectRepository.save(project).getId();
+        // 3. 저장
+        final Project savedProject = projectRepository.save(project);
+
+        // 4. 저장된 엔티티를 다시 DTO로 변환해서 반환 (id 포함)
+        return mapToDTO(savedProject, new ProjectDTO());
     }
 
     //조회 로직
