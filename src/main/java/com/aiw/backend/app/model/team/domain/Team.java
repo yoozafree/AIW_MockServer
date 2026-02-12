@@ -1,9 +1,13 @@
 package com.aiw.backend.app.model.team.domain;
 
 import com.aiw.backend.app.model.member.domain.Member;
+import com.aiw.backend.app.model.team_member.domain.TeamMember;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -49,5 +53,9 @@ public class Team {
   //팀 설명
   @Column(columnDefinition = "text")
   private String description;
+
+  //대시보드 알림 기능 용도
+  @OneToMany(mappedBy = "team")
+  private List<TeamMember> teamMembers = new ArrayList<>();
 
 }
