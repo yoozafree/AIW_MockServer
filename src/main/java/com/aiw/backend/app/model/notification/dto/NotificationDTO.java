@@ -16,7 +16,7 @@ public class NotificationDTO {
     private Long id;
 
     @NotNull
-    private String message;
+    private String content;
 
     @NotNull
     private Boolean activated;

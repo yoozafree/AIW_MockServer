@@ -95,7 +95,7 @@ public class NotificationService {
             notification.setTeam(team);
             notification.setType("ANNOUNCEMENT");
             notification.setTitle(title);
-            notification.setMessage(message);
+            notification.setContent(message);
             notification.setIsRead(false);
             notification.setRelatedId(relatedId);
 
@@ -113,7 +113,7 @@ public class NotificationService {
         notification.setMember(member);
         notification.setType("FEEDBACK");
         notification.setTitle(title);
-        notification.setMessage(message);
+        notification.setContent(message);
         notification.setIsRead(false);
         notification.setRelatedId(relatedId);
 
@@ -155,7 +155,7 @@ public class NotificationService {
     private NotificationDTO mapToDTO(final Notification notification,
             final NotificationDTO notificationDTO) {
         notificationDTO.setId(notification.getId());
-        notificationDTO.setMessage(notification.getMessage());
+        notificationDTO.setContent(notification.getContent());
         notificationDTO.setMember(notification.getMember() == null ? null : notification.getMember().getId());
 
         //마이페이지: 알림 설정 필드 매핑 추가
@@ -192,7 +192,7 @@ public class NotificationService {
 
     private Notification mapToEntity(final NotificationDTO notificationDTO,
             final Notification notification) {
-        notification.setMessage(notificationDTO.getMessage());
+        notification.setContent(notificationDTO.getContent());
         final Member member = notificationDTO.getMember() == null ? null : memberRepository.findById(notificationDTO.getMember())
                 .orElseThrow(() -> new NotFoundException("member not found"));
         notification.setMember(member);

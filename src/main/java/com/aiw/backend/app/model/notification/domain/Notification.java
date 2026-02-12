@@ -33,7 +33,7 @@ public class Notification {
   private Long id;
 
   @Column(nullable = false, columnDefinition = "longtext")
-  private String message;
+  private String content;
 
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)
   private Boolean activated;
