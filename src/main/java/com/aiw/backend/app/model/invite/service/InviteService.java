@@ -5,7 +5,7 @@ import com.aiw.backend.app.model.invite.domain.Invite;
 import com.aiw.backend.app.model.invite.dto.InviteDTO;
 import com.aiw.backend.app.model.invite.repository.InviteRepository;
 import com.aiw.backend.app.model.team.domain.Team;
-import com.aiw.backend.app.model.team.repos.TeamRepository;
+import com.aiw.backend.app.model.team.repository.TeamRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;
 import java.util.List;

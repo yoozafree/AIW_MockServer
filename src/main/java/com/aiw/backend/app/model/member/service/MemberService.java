@@ -28,14 +28,16 @@ public class MemberService {
     public List<MemberDTO> findAll() {
         final List<Member> members = memberRepository.findAll(Sort.by("id"));
         return members.stream()
+                .filter(member -> member.getActivated() != null && member.getActivated())
                 .map(member -> mapToDTO(member, new MemberDTO()))
                 .toList();
     }
 
     public MemberDTO get(final Long id) {
         return memberRepository.findById(id)
+                .filter(Member::getActivated) // 활성 상태인 경우만 통과
                 .map(member -> mapToDTO(member, new MemberDTO()))
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("삭제되었거나 존재하지 않는 회원입니다."));
     }
 
     public Long create(final MemberDTO memberDTO) {
@@ -54,8 +56,9 @@ public class MemberService {
     public void delete(final Long id) {
         final Member member = memberRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        publisher.publishEvent(new BeforeDeleteMember(id));
-        memberRepository.delete(member);
+        // 진짜 삭제(repository.delete) 대신 상태값 변경
+        member.setActivated(false);
+        memberRepository.save(member);
     }
 
     //마이페이지 전용: 내 정보 조회

@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/teamMembers", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TeamMemberResource {
+public class TeamMemberController {
 
     private final TeamMemberService teamMemberService;
 
-    public TeamMemberResource(final TeamMemberService teamMemberService) {
+    public TeamMemberController(final TeamMemberService teamMemberService) {
         this.teamMemberService = teamMemberService;
     }
 
