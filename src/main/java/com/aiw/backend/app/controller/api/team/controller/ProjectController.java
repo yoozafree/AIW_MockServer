@@ -30,4 +30,14 @@ public class ProjectController {
     public ResponseEntity<ProjectDTO> getProject(@PathVariable(name = "id") final Long id) {
         return ResponseEntity.ok(projectService.get(id));
     }
+
+    //수정
+    @PostMapping("/update")
+    public ResponseEntity<ProjectDTO> updateProject(
+            @RequestParam(name = "id") final Long id, // 쿼리 파라미터
+            @RequestBody @Valid final ProjectDTO projectDTO) {
+
+        final ProjectDTO updatedProject = projectService.update(id, projectDTO);
+        return ResponseEntity.ok(updatedProject);
+    }
 }
