@@ -2,7 +2,7 @@ package com.aiw.backend.app.model.member.service;
 
 import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.member.domain.Member;
-import com.aiw.backend.app.model.member.model.MemberDTO;
+import com.aiw.backend.app.model.member.dto.MemberDTO;
 import com.aiw.backend.app.model.member.repository.MemberRepository;
 import com.aiw.backend.util.CustomCollectors;
 import com.aiw.backend.util.NotFoundException;
@@ -28,14 +28,16 @@ public class MemberService {
     public List<MemberDTO> findAll() {
         final List<Member> members = memberRepository.findAll(Sort.by("id"));
         return members.stream()
+                .filter(member -> member.getActivated() != null && member.getActivated())
                 .map(member -> mapToDTO(member, new MemberDTO()))
                 .toList();
     }
 
     public MemberDTO get(final Long id) {
         return memberRepository.findById(id)
+                .filter(Member::getActivated) // 활성 상태인 경우만 통과
                 .map(member -> mapToDTO(member, new MemberDTO()))
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("삭제되었거나 존재하지 않는 회원입니다."));
     }
 
     public Long create(final MemberDTO memberDTO) {
@@ -54,8 +56,27 @@ public class MemberService {
     public void delete(final Long id) {
         final Member member = memberRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        publisher.publishEvent(new BeforeDeleteMember(id));
-        memberRepository.delete(member);
+        // 진짜 삭제(repository.delete) 대신 상태값 변경
+        member.setActivated(false);
+        memberRepository.save(member);
+    }
+
+    //마이페이지 전용: 내 정보 조회
+    public MemberDTO getShowInfo(final Long id) {
+        return memberRepository.findById(id)
+                .map(member -> mapToDTO(member, new MemberDTO()))
+                .orElseThrow(NotFoundException::new);
+    }
+
+    //마이페이지 전용: 내 정보 수정
+    public void updateMyInfo(final Long id, final MemberDTO memberDTO) {
+        final Member member = memberRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        // 마이페이지 수정 가능 필드만 매핑
+        mapMyInfoToEntity(memberDTO, member);
+
+        memberRepository.save(member);
     }
 
     private MemberDTO mapToDTO(final Member member, final MemberDTO memberDTO) {
@@ -77,6 +98,14 @@ public class MemberService {
         return member;
     }
 
+    //마이페이지 수정용 매핑: 이름 관심분야 업데이트
+    private Member mapMyInfoToEntity(final MemberDTO memberDTO, final Member member) {
+        // 이메일이나 프로바이더는 보안상 마이페이지에서 수정하지 않는 경우가 많으므로 선택적 매핑
+        member.setName(memberDTO.getName());
+        member.setInterestedField(memberDTO.getInterestedField());
+        return member;
+    }
+
     public boolean emailExists(final String email) {
         return memberRepository.existsByEmailIgnoreCase(email);
     }
@@ -90,5 +119,8 @@ public class MemberService {
                 .stream()
                 .collect(CustomCollectors.toSortedMap(Member::getId, Member::getProvider));
     }
+
+
+
 
 }

@@ -1,7 +1,7 @@
 package com.aiw.backend.app.model.action_item.domain;
 
-import com.aiw.backend.app.model.file.model.FileData;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
+import com.aiw.backend.app.model.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -30,46 +28,49 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class ActionItem {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String title;
+  @Column(nullable = false)
+  private String title;
 
-    @Column(nullable = false, unique = true)
-    private String assigneeMemberId;
+  @Column(nullable = false)
+  private LocalDateTime dueDate;
 
-    @Column(nullable = false)
-    private LocalDateTime dueDate;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean completed;
 
-    @Column(nullable = false, columnDefinition = "tinyint", length = 1)
-    private Boolean completed;
+  @Column(nullable = false)
+  private String memo;
 
-    @Column(nullable = false)
-    private String memo;
+  @Column(nullable = false)
+  private String image;
 
-    @Column(nullable = false, columnDefinition = "json")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private FileData image;
+  @Column(nullable = false)
+  private Long phase;
 
-    @Column(nullable = false)
-    private Integer phase;
+  @Column(nullable = false)
+  private String scope;
 
-    @Column(nullable = false)
-    private String scope;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_id", nullable = false)
-    private Meeting meeting;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "meeting_id", nullable = false)
+  private Meeting meeting;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "assignee_member_id")
+  private Member assigneeMember;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime createdAt;
+
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdatedAt;
 
 }

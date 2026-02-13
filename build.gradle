@@ -50,12 +50,7 @@ tasks.register('npmRunBuild', NpmTask) {
     inputs.file('.env')
     inputs.file('package.json')
     inputs.file('tsconfig.json')
-    inputs.file('webpack.config.js')
     outputs.dir(layout.buildDirectory.dir('resources/main/static'))
-}
-
-processResources {
-    dependsOn npmRunBuild
 }
 
 tasks.withType(Test) {

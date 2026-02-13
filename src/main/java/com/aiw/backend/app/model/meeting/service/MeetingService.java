@@ -2,7 +2,7 @@ package com.aiw.backend.app.model.meeting.service;
 
 import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
-import com.aiw.backend.app.model.meeting.model.MeetingDTO;
+import com.aiw.backend.app.model.meeting.dto.MeetingDTO;
 import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
 import com.aiw.backend.util.CustomCollectors;
 import com.aiw.backend.util.NotFoundException;

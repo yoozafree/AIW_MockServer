@@ -22,32 +22,32 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class Member {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String provider;
+  @Column(nullable = false)
+  private String provider;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+  @Column(nullable = false, unique = true)
+  private String name;
 
-    @Column
-    private String interestedField;
+  @Column
+  private String interestedField;
 
-    @Column(nullable = false, columnDefinition = "tinyint", length = 1)
-    private Boolean activated;
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean activated;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  @CreatedDate
+  @Column(nullable = false, updatable = false)
+  private OffsetDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  @LastModifiedDate
+  @Column(nullable = false)
+  private OffsetDateTime lastUpdatedAt;
 
 }

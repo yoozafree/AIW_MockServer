@@ -4,7 +4,7 @@ import com.aiw.backend.events.BeforeDeleteMeetingSpeakerMap;
 import com.aiw.backend.app.model.meeting_speaker_map.domain.MeetingSpeakerMap;
 import com.aiw.backend.app.model.meeting_speaker_map.repository.MeetingSpeakerMapRepository;
 import com.aiw.backend.app.model.stt_segment.domain.SttSegment;
-import com.aiw.backend.app.model.stt_segment.model.SttSegmentDTO;
+import com.aiw.backend.app.model.stt_segment.dto.SttSegmentDTO;
 import com.aiw.backend.app.model.stt_segment.repository.SttSegmentRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;

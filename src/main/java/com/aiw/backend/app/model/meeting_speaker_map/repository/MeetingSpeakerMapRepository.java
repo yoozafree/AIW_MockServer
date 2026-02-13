@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MeetingSpeakerMapRepository extends JpaRepository<MeetingSpeakerMap, Long> {
 
-    MeetingSpeakerMap findFirstByMeetingId(Long id);
+  MeetingSpeakerMap findFirstByMeetingId(Long id);
+
+  boolean existsByIdIgnoreCase(String id);
 
 }

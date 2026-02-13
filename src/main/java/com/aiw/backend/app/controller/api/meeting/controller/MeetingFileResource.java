@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.meeting.controller;
 
-import com.aiw.backend.app.model.meeting_file.model.MeetingFileDTO;
+import com.aiw.backend.app.model.meeting_file.dto.MeetingFileDTO;
 import com.aiw.backend.app.model.meeting_file.service.MeetingFileService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

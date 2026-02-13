@@ -46,6 +46,8 @@ If required, a Docker image can be created with the Spring Boot plugin. Add `SPR
 gradlew bootBuildImage --imageName=com.aiw/backend
 ```
 
+
+
 ## Further readings
 
 * [Gradle user manual](https://docs.gradle.org/)  
@@ -54,4 +56,29 @@ gradlew bootBuildImage --imageName=com.aiw/backend
 * [Learn React](https://react.dev/learn)
 * [Webpack concepts](https://webpack.js.org/concepts/)  
 * [npm docs](https://docs.npmjs.com/)  
-* [Tailwind CSS](https://tailwindcss.com/)  
+* [Tailwind CSS](https://tailwindcss.com/)
+
+---
+
+### 🧾 코드 컨벤션
+
+커밋 메시지는 다음 규칙에 맞춰 작성합니다
+
+> 📌 예시: **`✨ feat: sign up complete`**
+
+---
+
+| 태그                | 설명                                      |
+|-------------------|-----------------------------------------|
+| ✨ **feat**        | 새로운 기능 추가                               |
+| 🐛 **fix**        | 버그 수정                                   |
+| 📝 **docs**       | 문서 수정 (README 등)                        |
+| 💄 **style**      | 코드 포맷팅, 세미콜론 누락, 코드 변경 없음               |
+| ♻️ **refactor**   | 코드 리팩토링 (기능 변화 없이 구조 개선)                |
+| ✅ **test**        | 테스트 코드 추가, 기존 테스트 리팩토링                  |
+| 🔧 **chore**      | 빌드 설정 변경, 패키지 매니저 설정 등                  |
+| 🔀 **merge**      | 브랜치 병합 (예: `merge: main` → main과 병합했음) |
+| 📍 **checkpoint** | 진행중(체크포인트)                              |
+| 🎨 **design**     | 뷰 디자인 변경                                |
+
+---

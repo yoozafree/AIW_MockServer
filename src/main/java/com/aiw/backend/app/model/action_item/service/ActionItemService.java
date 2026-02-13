@@ -1,34 +1,34 @@
 package com.aiw.backend.app.model.action_item.service;
 
 import com.aiw.backend.app.model.action_item.domain.ActionItem;
-import com.aiw.backend.app.model.action_item.model.ActionItemDTO;
-import com.aiw.backend.app.model.action_item.repos.ActionItemRepository;
+import com.aiw.backend.app.model.action_item.dto.ActionItemDTO;
+import com.aiw.backend.app.model.action_item.repository.ActionItemRepository;
 import com.aiw.backend.events.BeforeDeleteMeeting;
-import com.aiw.backend.app.model.file.service.FileDataService;
+import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
 import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
+import com.aiw.backend.app.model.member.domain.Member;
+import com.aiw.backend.app.model.member.repository.MemberRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;
 import java.util.List;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class ActionItemService {
 
     private final ActionItemRepository actionItemRepository;
     private final MeetingRepository meetingRepository;
-    private final FileDataService fileDataService;
+    private final MemberRepository memberRepository;
 
     public ActionItemService(final ActionItemRepository actionItemRepository,
-            final MeetingRepository meetingRepository, final FileDataService fileDataService) {
+            final MeetingRepository meetingRepository, final MemberRepository memberRepository) {
         this.actionItemRepository = actionItemRepository;
         this.meetingRepository = meetingRepository;
-        this.fileDataService = fileDataService;
+        this.memberRepository = memberRepository;
     }
 
     public List<ActionItemDTO> findAll() {
@@ -47,14 +47,12 @@ public class ActionItemService {
     public Long create(final ActionItemDTO actionItemDTO) {
         final ActionItem actionItem = new ActionItem();
         mapToEntity(actionItemDTO, actionItem);
-        fileDataService.persistUpload(actionItem.getImage());
         return actionItemRepository.save(actionItem).getId();
     }
 
     public void update(final Long id, final ActionItemDTO actionItemDTO) {
         final ActionItem actionItem = actionItemRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        fileDataService.handleUpdate(actionItem.getImage(), actionItemDTO.getImage());
         mapToEntity(actionItemDTO, actionItem);
         actionItemRepository.save(actionItem);
     }
@@ -62,41 +60,40 @@ public class ActionItemService {
     public void delete(final Long id) {
         final ActionItem actionItem = actionItemRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        fileDataService.removeFileContent(actionItem.getImage());
         actionItemRepository.delete(actionItem);
     }
 
     private ActionItemDTO mapToDTO(final ActionItem actionItem, final ActionItemDTO actionItemDTO) {
         actionItemDTO.setId(actionItem.getId());
         actionItemDTO.setTitle(actionItem.getTitle());
-        actionItemDTO.setAssigneeMemberId(actionItem.getAssigneeMemberId());
         actionItemDTO.setDueDate(actionItem.getDueDate());
         actionItemDTO.setCompleted(actionItem.getCompleted());
         actionItemDTO.setMemo(actionItem.getMemo());
         actionItemDTO.setImage(actionItem.getImage());
         actionItemDTO.setPhase(actionItem.getPhase());
         actionItemDTO.setScope(actionItem.getScope());
+        actionItemDTO.setActivated(actionItem.getActivated());
         actionItemDTO.setMeeting(actionItem.getMeeting() == null ? null : actionItem.getMeeting().getId());
+        actionItemDTO.setAssigneeMember(actionItem.getAssigneeMember() == null ? null : actionItem.getAssigneeMember().getId());
         return actionItemDTO;
     }
 
     private ActionItem mapToEntity(final ActionItemDTO actionItemDTO, final ActionItem actionItem) {
         actionItem.setTitle(actionItemDTO.getTitle());
-        actionItem.setAssigneeMemberId(actionItemDTO.getAssigneeMemberId());
         actionItem.setDueDate(actionItemDTO.getDueDate());
         actionItem.setCompleted(actionItemDTO.getCompleted());
         actionItem.setMemo(actionItemDTO.getMemo());
         actionItem.setImage(actionItemDTO.getImage());
         actionItem.setPhase(actionItemDTO.getPhase());
         actionItem.setScope(actionItemDTO.getScope());
+        actionItem.setActivated(actionItemDTO.getActivated());
         final Meeting meeting = actionItemDTO.getMeeting() == null ? null : meetingRepository.findById(actionItemDTO.getMeeting())
                 .orElseThrow(() -> new NotFoundException("meeting not found"));
         actionItem.setMeeting(meeting);
+        final Member assigneeMember = actionItemDTO.getAssigneeMember() == null ? null : memberRepository.findById(actionItemDTO.getAssigneeMember())
+                .orElseThrow(() -> new NotFoundException("assigneeMember not found"));
+        actionItem.setAssigneeMember(assigneeMember);
         return actionItem;
-    }
-
-    public boolean assigneeMemberIdExists(final String assigneeMemberId) {
-        return actionItemRepository.existsByAssigneeMemberIdIgnoreCase(assigneeMemberId);
     }
 
     @EventListener(BeforeDeleteMeeting.class)
@@ -106,6 +103,17 @@ public class ActionItemService {
         if (meetingActionItem != null) {
             referencedException.setKey("meeting.actionItem.meeting.referenced");
             referencedException.addParam(meetingActionItem.getId());
+            throw referencedException;
+        }
+    }
+
+    @EventListener(BeforeDeleteMember.class)
+    public void on(final BeforeDeleteMember event) {
+        final ReferencedException referencedException = new ReferencedException();
+        final ActionItem assigneeMemberActionItem = actionItemRepository.findFirstByAssigneeMemberId(event.getId());
+        if (assigneeMemberActionItem != null) {
+            referencedException.setKey("member.actionItem.assigneeMember.referenced");
+            referencedException.addParam(assigneeMemberActionItem.getId());
             throw referencedException;
         }
     }

@@ -1,6 +1,6 @@
 package com.aiw.backend.app.controller.api.stt.controller;
 
-import com.aiw.backend.app.model.stt_segment.model.SttSegmentDTO;
+import com.aiw.backend.app.model.stt_segment.dto.SttSegmentDTO;
 import com.aiw.backend.app.model.stt_segment.service.SttSegmentService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

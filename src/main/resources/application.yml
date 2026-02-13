@@ -1,11 +1,7 @@
 spring:
-  datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/backend?serverTimezone=UTC}
-    username: ${JDBC_DATABASE_USERNAME:root}
-    password: ${JDBC_DATABASE_PASSWORD:<<YOUR_PASSWORD>>}
-    hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
+  profiles:
+    default: local
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,10 +13,12 @@ spring:
             non_contextual_creation: true
         id:
           new_generator_mappings: true
+
   servlet:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+
 error:
   handling:
     http-status-in-json-response: true
@@ -42,8 +40,10 @@ error:
       MeetingFileMeetingUnique: MEETING_FILE_MEETING_UNIQUE
       SttSegmentSegTextUnique: STT_SEGMENT_SEG_TEXT_UNIQUE
       ValidFileType: VALID_FILE_TYPE
+
 server:
   tomcat:
     max-part-count: '100'
+
 springdoc:
   pathsToMatch: /api/**
