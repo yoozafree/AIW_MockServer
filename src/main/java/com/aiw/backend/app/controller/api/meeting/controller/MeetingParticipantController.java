@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/meetingParticipants", produces = MediaType.APPLICATION_JSON_VALUE)
-public class MeetingParticipantResource {
+public class MeetingParticipantController {
 
     private final MeetingParticipantService meetingParticipantService;
 
-    public MeetingParticipantResource(final MeetingParticipantService meetingParticipantService) {
+    public MeetingParticipantController(final MeetingParticipantService meetingParticipantService) {
         this.meetingParticipantService = meetingParticipantService;
     }
 

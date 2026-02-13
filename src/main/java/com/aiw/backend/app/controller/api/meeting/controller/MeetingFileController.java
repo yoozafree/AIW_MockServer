@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/meetingFiles", produces = MediaType.APPLICATION_JSON_VALUE)
-public class MeetingFileResource {
+public class MeetingFileController {
 
     private final MeetingFileService meetingFileService;
 
-    public MeetingFileResource(final MeetingFileService meetingFileService) {
+    public MeetingFileController(final MeetingFileService meetingFileService) {
         this.meetingFileService = meetingFileService;
     }
 

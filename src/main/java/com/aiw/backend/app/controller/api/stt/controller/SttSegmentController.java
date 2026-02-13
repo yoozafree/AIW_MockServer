@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/sttSegments", produces = MediaType.APPLICATION_JSON_VALUE)
-public class SttSegmentResource {
+public class SttSegmentController {
 
     private final SttSegmentService sttSegmentService;
 
-    public SttSegmentResource(final SttSegmentService sttSegmentService) {
+    public SttSegmentController(final SttSegmentService sttSegmentService) {
         this.sttSegmentService = sttSegmentService;
     }
 
