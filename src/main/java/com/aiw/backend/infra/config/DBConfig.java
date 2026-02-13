@@ -1,4 +1,4 @@
-package com.aiw.backend.config;
+package com.aiw.backend.infra.config;
 
 import com.aiw.backend.util.Jackson3JsonFormatMapper;
 import java.time.OffsetDateTime;

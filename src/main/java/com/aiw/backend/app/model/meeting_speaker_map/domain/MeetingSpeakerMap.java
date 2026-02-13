@@ -27,14 +27,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class MeetingSpeakerMap {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  private String id;
+  private Long id;
 
   @Column(nullable = false, length = 20)
   private String speakerLabel;
-
-  @Column(nullable = false)
-  private String meetingId;
 
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)
   private Boolean activated;

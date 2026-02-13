@@ -8,6 +8,8 @@ public interface MeetingSpeakerMapRepository extends JpaRepository<MeetingSpeake
 
   MeetingSpeakerMap findFirstByMeetingId(Long id);
 
-  boolean existsByIdIgnoreCase(String id);
+  boolean existsByIdIgnoreCase(Long id);
+
+  boolean existsById(Long id);
 
 }

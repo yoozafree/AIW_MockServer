@@ -39,27 +39,26 @@ public class MeetingSpeakerMapService {
         .toList();
   }
 
-  public MeetingSpeakerMapDTO get(final String id) {
+  public MeetingSpeakerMapDTO get(final Long id) {
     return meetingSpeakerMapRepository.findById(id)
         .map(meetingSpeakerMap -> mapToDTO(meetingSpeakerMap, new MeetingSpeakerMapDTO()))
         .orElseThrow(NotFoundException::new);
   }
 
-  public String create(final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
+  public Long create(final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
     final MeetingSpeakerMap meetingSpeakerMap = new MeetingSpeakerMap();
     mapToEntity(meetingSpeakerMapDTO, meetingSpeakerMap);
-    meetingSpeakerMap.setId(meetingSpeakerMapDTO.getId());
     return meetingSpeakerMapRepository.save(meetingSpeakerMap).getId();
   }
 
-  public void update(final String id, final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
+  public void update(final Long id, final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
     final MeetingSpeakerMap meetingSpeakerMap = meetingSpeakerMapRepository.findById(id)
         .orElseThrow(NotFoundException::new);
     mapToEntity(meetingSpeakerMapDTO, meetingSpeakerMap);
     meetingSpeakerMapRepository.save(meetingSpeakerMap);
   }
 
-  public void delete(final String id) {
+  public void delete(final Long id) {
     final MeetingSpeakerMap meetingSpeakerMap = meetingSpeakerMapRepository.findById(id)
         .orElseThrow(NotFoundException::new);
     publisher.publishEvent(new BeforeDeleteMeetingSpeakerMap(id));
@@ -70,7 +69,6 @@ public class MeetingSpeakerMapService {
       final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
     meetingSpeakerMapDTO.setId(meetingSpeakerMap.getId());
     meetingSpeakerMapDTO.setSpeakerLabel(meetingSpeakerMap.getSpeakerLabel());
-    meetingSpeakerMapDTO.setMeetingId(meetingSpeakerMap.getMeetingId());
     meetingSpeakerMapDTO.setActivated(meetingSpeakerMap.getActivated());
     meetingSpeakerMapDTO.setMeeting(meetingSpeakerMap.getMeeting() == null ? null : meetingSpeakerMap.getMeeting().getId());
     return meetingSpeakerMapDTO;
@@ -79,7 +77,6 @@ public class MeetingSpeakerMapService {
   private MeetingSpeakerMap mapToEntity(final MeetingSpeakerMapDTO meetingSpeakerMapDTO,
       final MeetingSpeakerMap meetingSpeakerMap) {
     meetingSpeakerMap.setSpeakerLabel(meetingSpeakerMapDTO.getSpeakerLabel());
-    meetingSpeakerMap.setMeetingId(meetingSpeakerMapDTO.getMeetingId());
     meetingSpeakerMap.setActivated(meetingSpeakerMapDTO.getActivated());
     final Meeting meeting = meetingSpeakerMapDTO.getMeeting() == null ? null : meetingRepository.findById(meetingSpeakerMapDTO.getMeeting())
         .orElseThrow(() -> new NotFoundException("meeting not found"));
@@ -87,11 +84,11 @@ public class MeetingSpeakerMapService {
     return meetingSpeakerMap;
   }
 
-  public boolean idExists(final String id) {
-    return meetingSpeakerMapRepository.existsByIdIgnoreCase(id);
+  public boolean idExists(final Long id) {
+    return meetingSpeakerMapRepository.existsById(id);
   }
 
-  public Map<String, String> getMeetingSpeakerMapValues() {
+  public Map<Long, String> getMeetingSpeakerMapValues() {
     return meetingSpeakerMapRepository.findAll(Sort.by("id"))
         .stream()
         .collect(CustomCollectors.toSortedMap(MeetingSpeakerMap::getId, MeetingSpeakerMap::getSpeakerLabel));

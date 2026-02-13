@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.stt.controller;
+package com.aiw.backend.app.controller.api.stt;
 
 import com.aiw.backend.app.model.stt_segment.dto.SttSegmentDTO;
 import com.aiw.backend.app.model.stt_segment.service.SttSegmentService;
