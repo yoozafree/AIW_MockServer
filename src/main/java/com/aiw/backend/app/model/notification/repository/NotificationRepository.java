@@ -15,9 +15,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     // 특정 사용자의 알림 목록 조회 (최신순)
     List<Notification> findByMemberIdAndTypeIsNotOrderByDateCreatedDesc(Long memberId, String excludeType);
 
-    // 특정 사용자의 읽지 않은 알림 개수
-    Long countByMemberIdAndIsReadAndTypeIsNot(Long memberId, Boolean isRead, String excludeType);
-
     // 특정 팀의 알림 목록
     List<Notification> findByTeamIdOrderByDateCreatedDesc(Long teamId);
 

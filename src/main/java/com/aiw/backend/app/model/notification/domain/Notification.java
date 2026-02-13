@@ -64,9 +64,6 @@ public class Notification {
   @Column(nullable = false, length = 50)
   private String type; // "SETTING", "ANNOUNCEMENT", "FEEDBACK", "TODO", "MEETING" 등
 
-  @Column
-  private Boolean isRead = false; // 읽음 여부
-
   @Column(length = 200)
   private String title; // 알림 제목
 

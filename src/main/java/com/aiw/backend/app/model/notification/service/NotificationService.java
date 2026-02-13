@@ -69,14 +69,6 @@ public class NotificationService {
                 .toList();
     }
 
-    //대시보드: 알림 읽음 처리
-    public void markAsRead(final Long notificationId) {
-        final Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new NotFoundException("알림을 찾을 수 없습니다."));
-
-        notification.setIsRead(true);
-        notificationRepository.save(notification);
-    }
 
     //팀장 공지 알림
     public void createAnnouncementNotification(final Long teamId, final Long authorId,
@@ -96,7 +88,6 @@ public class NotificationService {
             notification.setType("ANNOUNCEMENT");
             notification.setTitle(title);
             notification.setContent(message);
-            notification.setIsRead(false);
             notification.setRelatedId(relatedId);
 
             notificationRepository.save(notification);
@@ -114,7 +105,6 @@ public class NotificationService {
         notification.setType("FEEDBACK");
         notification.setTitle(title);
         notification.setContent(message);
-        notification.setIsRead(false);
         notification.setRelatedId(relatedId);
 
         notificationRepository.save(notification);
@@ -165,7 +155,6 @@ public class NotificationService {
 
         //대시보드: 알림 필드 매핑 추가
         notificationDTO.setType(notification.getType());
-        notificationDTO.setIsRead(notification.getIsRead());
         notificationDTO.setTitle(notification.getTitle());
         notificationDTO.setTeamId(notification.getTeam() == null ? null : notification.getTeam().getId());
         notificationDTO.setRelatedId(notification.getRelatedId());
@@ -200,9 +189,6 @@ public class NotificationService {
         // 대시보드 필드 매핑
         if (notificationDTO.getType() != null) {
             notification.setType(notificationDTO.getType());
-        }
-        if (notificationDTO.getIsRead() != null) {
-            notification.setIsRead(notificationDTO.getIsRead());
         }
         if (notificationDTO.getTitle() != null) {
             notification.setTitle(notificationDTO.getTitle());
