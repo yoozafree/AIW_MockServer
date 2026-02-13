@@ -1,15 +1,8 @@
 package com.aiw.backend.app.model.action_item.service;
 
 import com.aiw.backend.app.model.action_item.domain.ActionItem;
-<<<<<<< Updated upstream
 import com.aiw.backend.app.model.action_item.dto.ActionItemDTO;
 import com.aiw.backend.app.model.action_item.repository.ActionItemRepository;
-=======
-import com.aiw.backend.app.model.action_item.model.ActionItemDTO;
-import com.aiw.backend.app.model.action_item.repository.ActionItemRepository;
-import com.aiw.backend.app.model.member.domain.Member;
-import com.aiw.backend.app.model.member.repository.MemberRepository;
->>>>>>> Stashed changes
 import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
@@ -27,26 +20,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActionItemService {
 
-<<<<<<< Updated upstream
     private final ActionItemRepository actionItemRepository;
     private final MeetingRepository meetingRepository;
     private final MemberRepository memberRepository;
 
     public ActionItemService(final ActionItemRepository actionItemRepository,
             final MeetingRepository meetingRepository, final MemberRepository memberRepository) {
-=======
-  private final MemberRepository memberRepository;
-  private final ActionItemRepository actionItemRepository;
-  private final MeetingRepository meetingRepository;
-  private final FileDataService fileDataService;
-
-    public ActionItemService(
-        MemberRepository memberRepository,
-        ActionItemRepository actionItemRepository,
-        MeetingRepository meetingRepository,
-        FileDataService fileDataService) {
-        this.memberRepository = memberRepository;
->>>>>>> Stashed changes
         this.actionItemRepository = actionItemRepository;
         this.meetingRepository = meetingRepository;
         this.memberRepository = memberRepository;
@@ -87,12 +66,6 @@ public class ActionItemService {
     private ActionItemDTO mapToDTO(final ActionItem actionItem, final ActionItemDTO actionItemDTO) {
         actionItemDTO.setId(actionItem.getId());
         actionItemDTO.setTitle(actionItem.getTitle());
-<<<<<<< Updated upstream
-=======
-        actionItemDTO.setAssigneeMemberId(
-            actionItem.getAssignee() == null ? null : actionItem.getAssignee().getId()
-        );
->>>>>>> Stashed changes
         actionItemDTO.setDueDate(actionItem.getDueDate());
         actionItemDTO.setCompleted(actionItem.getCompleted());
         actionItemDTO.setMemo(actionItem.getMemo());
@@ -107,22 +80,12 @@ public class ActionItemService {
 
     private ActionItem mapToEntity(final ActionItemDTO actionItemDTO, final ActionItem actionItem) {
         actionItem.setTitle(actionItemDTO.getTitle());
-<<<<<<< Updated upstream
-=======
-        final Member assignee = memberRepository
-            .findById(actionItemDTO.getAssigneeMemberId())
-            .orElseThrow(() -> new NotFoundException("assignee member not found"));
-
-        actionItem.setAssignee(assignee);
-
->>>>>>> Stashed changes
         actionItem.setDueDate(actionItemDTO.getDueDate());
         actionItem.setCompleted(actionItemDTO.getCompleted());
         actionItem.setMemo(actionItemDTO.getMemo());
         actionItem.setImage(actionItemDTO.getImage());
         actionItem.setPhase(actionItemDTO.getPhase());
         actionItem.setScope(actionItemDTO.getScope());
-<<<<<<< Updated upstream
         actionItem.setActivated(actionItemDTO.getActivated());
         final Meeting meeting = actionItemDTO.getMeeting() == null ? null : meetingRepository.findById(actionItemDTO.getMeeting())
                 .orElseThrow(() -> new NotFoundException("meeting not found"));
@@ -132,18 +95,6 @@ public class ActionItemService {
         actionItem.setAssigneeMember(assigneeMember);
         return actionItem;
     }
-
-=======
-
-        final Meeting meeting = actionItemDTO.getMeeting() == null ? null : meetingRepository.findById(actionItemDTO.getMeeting())
-                .orElseThrow(() -> new NotFoundException("meeting not found"));
-
-        actionItem.setMeeting(meeting);
-
-        return actionItem;
-    }
-
->>>>>>> Stashed changes
     @EventListener(BeforeDeleteMeeting.class)
     public void on(final BeforeDeleteMeeting event) {
         final ReferencedException referencedException = new ReferencedException();

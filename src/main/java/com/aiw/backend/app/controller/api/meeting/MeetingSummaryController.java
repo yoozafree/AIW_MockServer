@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.meeting.controller;
+package com.aiw.backend.app.controller.api.meeting;
 
 import com.aiw.backend.app.model.meeting_summary.dto.MeetingSummaryDTO;
 import com.aiw.backend.app.model.meeting_summary.service.MeetingSummaryService;

@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.meeting.controller;
+package com.aiw.backend.app.controller.api.meeting;
 
 import com.aiw.backend.app.model.meeting_speaker_map.dto.MeetingSpeakerMapDTO;
 import com.aiw.backend.app.model.meeting_speaker_map.service.MeetingSpeakerMapService;
@@ -24,15 +24,10 @@ public class MeetingSpeakerMapController {
 
   private final MeetingSpeakerMapService meetingSpeakerMapService;
 
-<<<<<<< Updated upstream:src/main/java/com/aiw/backend/app/controller/api/meeting/controller/MeetingSpeakerMapResource.java
-  public MeetingSpeakerMapResource(final MeetingSpeakerMapService meetingSpeakerMapService) {
+  public MeetingSpeakerMapController(final MeetingSpeakerMapService meetingSpeakerMapService) {
     this.meetingSpeakerMapService = meetingSpeakerMapService;
   }
-=======
-    public MeetingSpeakerMapController(final MeetingSpeakerMapService meetingSpeakerMapService) {
-        this.meetingSpeakerMapService = meetingSpeakerMapService;
-    }
->>>>>>> Stashed changes:src/main/java/com/aiw/backend/app/controller/api/meeting/controller/MeetingSpeakerMapController.java
+
 
   @GetMapping
   public ResponseEntity<List<MeetingSpeakerMapDTO>> getAllMeetingSpeakerMaps() {
@@ -41,30 +36,32 @@ public class MeetingSpeakerMapController {
 
   @GetMapping("/{id}")
   public ResponseEntity<MeetingSpeakerMapDTO> getMeetingSpeakerMap(
-      @PathVariable(name = "id") final String id) {
+      @PathVariable(name = "id") final Long id) {
     return ResponseEntity.ok(meetingSpeakerMapService.get(id));
   }
 
   @PostMapping
   @ApiResponse(responseCode = "201")
-  public ResponseEntity<String> createMeetingSpeakerMap(
+  public ResponseEntity<Long> createMeetingSpeakerMap(
       @RequestBody @Valid final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
-    final String createdId = meetingSpeakerMapService.create(meetingSpeakerMapDTO);
+
+    final Long createdId = meetingSpeakerMapService.create(meetingSpeakerMapDTO);
     return new ResponseEntity<>('"' + createdId + '"', HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<String> updateMeetingSpeakerMap(
-      @PathVariable(name = "id") final String id,
+  public ResponseEntity<Long> updateMeetingSpeakerMap(
+      @PathVariable(name = "id") final Long id,
       @RequestBody @Valid final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
+
     meetingSpeakerMapService.update(id, meetingSpeakerMapDTO);
-    return ResponseEntity.ok('"' + id + '"');
+    return ResponseEntity.ok(id);
   }
 
   @DeleteMapping("/{id}")
   @ApiResponse(responseCode = "204")
   public ResponseEntity<Void> deleteMeetingSpeakerMap(
-      @PathVariable(name = "id") final String id) {
+      @PathVariable(name = "id") final Long id) {
     meetingSpeakerMapService.delete(id);
     return ResponseEntity.noContent().build();
   }

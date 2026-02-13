@@ -35,7 +35,8 @@ public @interface MeetingSpeakerMapIdValid {
 
     Class<? extends Payload>[] payload() default {};
 
-    class MeetingSpeakerMapIdValidValidator implements ConstraintValidator<MeetingSpeakerMapIdValid, String> {
+    class MeetingSpeakerMapIdValidValidator
+        implements ConstraintValidator<MeetingSpeakerMapIdValid, Long> {
 
         private final MeetingSpeakerMapService meetingSpeakerMapService;
         private final HttpServletRequest request;
@@ -48,7 +49,7 @@ public @interface MeetingSpeakerMapIdValid {
         }
 
         @Override
-        public boolean isValid(final String value, final ConstraintValidatorContext cvContext) {
+        public boolean isValid(final Long value, final ConstraintValidatorContext cvContext) {
             @SuppressWarnings("unchecked") final Map<String, String> pathVariables =
                     ((Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE));
             final String currentId = pathVariables.get("id");

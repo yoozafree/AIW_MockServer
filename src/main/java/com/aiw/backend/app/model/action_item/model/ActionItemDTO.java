@@ -1,8 +1,5 @@
 package com.aiw.backend.app.model.action_item.model;
 
-import com.aiw.backend.app.model.file.model.FileData;
-import com.aiw.backend.app.model.file.model.ValidFileType;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -34,9 +31,7 @@ public class ActionItemDTO {
     private String memo;
 
     @NotNull
-    @Valid
-    @ValidFileType({"jpeg", "jpg", "png"})
-    private FileData image;
+    private String image;
 
     @NotNull
     private Integer phase;

@@ -1,4 +1,4 @@
-package com.aiw.backend.app.model.meeting.rest;
+package com.aiw.backend.app.controller.api.meeting;
 
 import com.aiw.backend.app.model.meeting.dto.MeetingDTO;
 import com.aiw.backend.app.model.meeting.service.MeetingService;

@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.meeting.controller;
+package com.aiw.backend.app.controller.api.meeting;
 
 import com.aiw.backend.app.model.action_item.dto.ActionItemDTO;
 import com.aiw.backend.app.model.action_item.service.ActionItemService;
@@ -22,13 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/actionItems", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ActionItemController {
 
-  private final ActionItemService actionItemService;
-
-    public ActionItemController(final ActionItemService actionItemService,
-            final FileDataService fileDataService) {
-        this.actionItemService = actionItemService;
-        this.fileDataService = fileDataService;
-    }
+  private ActionItemService actionItemService;
 
   @GetMapping
   public ResponseEntity<List<ActionItemDTO>> getAllActionItems() {

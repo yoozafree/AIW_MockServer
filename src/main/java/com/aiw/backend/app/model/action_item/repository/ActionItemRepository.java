@@ -6,14 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ActionItemRepository extends JpaRepository<ActionItem, Long> {
 
-<<<<<<< Updated upstream
-  ActionItem findFirstByMeetingId(Long id);
+  ActionItem findFirstByMeeting_Id(Long id);
 
   ActionItem findFirstByAssigneeMemberId(Long id);
-=======
-  boolean existsByAssignee_Id(Long assigneeId);
-
-  ActionItem findFirstByMeeting_Id(Long meetingId);
->>>>>>> Stashed changes
 
 }
