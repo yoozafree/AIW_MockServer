@@ -36,22 +36,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
-node {
-    download.set(true)
-    version.set('24.13.0')
-}
 
-tasks.register('npmRunBuild', NpmTask) {
-    args = ['run', 'build']
-    dependsOn npmInstall
-
-    inputs.files(fileTree('node_modules'))
-    inputs.files(fileTree('src/main/webapp'))
-    inputs.file('.env')
-    inputs.file('package.json')
-    inputs.file('tsconfig.json')
-    outputs.dir(layout.buildDirectory.dir('resources/main/static'))
-}
 
 tasks.withType(Test) {
     useJUnitPlatform()

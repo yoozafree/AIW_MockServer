@@ -36,8 +36,14 @@ public class ActionItem {
   @Column(nullable = false)
   private String title;
 
+<<<<<<< Updated upstream
   @Column(nullable = false)
   private LocalDateTime dueDate;
+=======
+    @ManyToOne
+    @JoinColumn(name="assignee_member_id")
+    private Member assignee;
+>>>>>>> Stashed changes
 
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)
   private Boolean completed;

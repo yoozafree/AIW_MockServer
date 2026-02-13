@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/sttStates", produces = MediaType.APPLICATION_JSON_VALUE)
-public class SttStateResource {
+public class SttStateController {
 
     private final SttStateService sttStateService;
 
-    public SttStateResource(final SttStateService sttStateService) {
+    public SttStateController(final SttStateService sttStateService) {
         this.sttStateService = sttStateService;
     }
 

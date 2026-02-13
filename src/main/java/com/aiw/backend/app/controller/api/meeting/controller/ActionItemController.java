@@ -20,13 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/actionItems", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ActionItemResource {
+public class ActionItemController {
 
   private final ActionItemService actionItemService;
 
-  public ActionItemResource(final ActionItemService actionItemService) {
-    this.actionItemService = actionItemService;
-  }
+    public ActionItemController(final ActionItemService actionItemService,
+            final FileDataService fileDataService) {
+        this.actionItemService = actionItemService;
+        this.fileDataService = fileDataService;
+    }
 
   @GetMapping
   public ResponseEntity<List<ActionItemDTO>> getAllActionItems() {

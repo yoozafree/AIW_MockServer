@@ -20,13 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/meetingSpeakerMaps", produces = MediaType.APPLICATION_JSON_VALUE)
-public class MeetingSpeakerMapResource {
+public class MeetingSpeakerMapController {
 
   private final MeetingSpeakerMapService meetingSpeakerMapService;
 
+<<<<<<< Updated upstream:src/main/java/com/aiw/backend/app/controller/api/meeting/controller/MeetingSpeakerMapResource.java
   public MeetingSpeakerMapResource(final MeetingSpeakerMapService meetingSpeakerMapService) {
     this.meetingSpeakerMapService = meetingSpeakerMapService;
   }
+=======
+    public MeetingSpeakerMapController(final MeetingSpeakerMapService meetingSpeakerMapService) {
+        this.meetingSpeakerMapService = meetingSpeakerMapService;
+    }
+>>>>>>> Stashed changes:src/main/java/com/aiw/backend/app/controller/api/meeting/controller/MeetingSpeakerMapController.java
 
   @GetMapping
   public ResponseEntity<List<MeetingSpeakerMapDTO>> getAllMeetingSpeakerMaps() {

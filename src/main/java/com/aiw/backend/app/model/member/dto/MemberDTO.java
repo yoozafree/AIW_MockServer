@@ -20,12 +20,10 @@ public class MemberDTO {
 
     @NotNull
     @Size(max = 255)
-    @MemberEmailUnique
     private String email;
 
     @NotNull
     @Size(max = 255)
-    @MemberNameUnique
     private String name;
 
     @Size(max = 255)
