@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/personal-memos")
+@RequestMapping("/api/personalMemos")
 public class PersonalMemoController {
     private final PersonalMemoService personalMemoService;
 
@@ -16,7 +16,7 @@ public class PersonalMemoController {
 
     // 조회
     @GetMapping
-    public ResponseEntity<PersonalMemoDTO> getMemo(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<PersonalMemoDTO> getMemo(@RequestHeader("id") String authHeader) {
         // 인증 로직 연동 전까지 하드코딩된 ID 1L 사용
         Long currentMemberId = 1L;
         return ResponseEntity.ok(personalMemoService.getMemo(currentMemberId));
@@ -25,7 +25,7 @@ public class PersonalMemoController {
     // 작성 및 수정
     @PostMapping
     public ResponseEntity<PersonalMemoDTO> saveMemo(
-            @RequestHeader("Authorization") String authHeader,
+            @RequestHeader("id") String authHeader,
             @RequestBody PersonalMemoDTO requestDTO) {
 
         Long currentMemberId = 1L;
