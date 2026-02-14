@@ -59,15 +59,17 @@ public class NotificationService {
         return true;
     }
 
-    //대시보드: 알림 조회
+    // 대시보드: 알림 조회
     public List<NotificationDTO> findAllByMember(final Long memberId) {
+
         final List<Notification> notifications = notificationRepository
-                .findByMemberIdAndTypeIsNotOrderByDateCreatedDesc(memberId, "SETTING");
+                .findByMemberIdAndTypeIsNotOrderByCreatedAtDesc(memberId, "SETTING");
 
         return notifications.stream()
                 .map(notification -> mapToDTO(notification, new NotificationDTO()))
                 .toList();
     }
+
 
 
     //팀장 공지 알림
