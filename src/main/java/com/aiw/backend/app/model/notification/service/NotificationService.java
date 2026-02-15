@@ -35,22 +35,36 @@ public class NotificationService {
 
     //마이페이지: 알림 설정 조회
     public NotificationDTO getSettings(final Long memberId) {
-        // 해당 멤버의 알림 설정 엔티티를 찾습니다.
-        // findFirstByMemberId 또는 findByMemberId (Repository에 정의 필요) 사용
-        final Notification notification = notificationRepository.findFirstByMemberId(memberId);
+        Notification notification = notificationRepository.findFirstByMemberIdAndType(memberId, "SETTING");
 
+        // 2. 만약 없다면 (처음 조회하는 유저라면) 기본값으로 생성해줍니다.
         if (notification == null) {
-            throw new NotFoundException("알림 설정을 찾을 수 없습니다.");
+            final Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+
+            notification = new Notification();
+            notification.setMember(member);
+            notification.setType("SETTING");
+            notification.setActivated(true);
+            notification.setAllAlarm(true);
+            notification.setMeetingAlarm(true);
+            notification.setDeadlineAlarm(true);
+            notification.setFeedbackAlarm(true); // 새 필드 추가
+            notification.setContent("USER_SETTINGS");
+
+            notificationRepository.save(notification);
         }
 
         return mapToDTO(notification, new NotificationDTO());
     }
     //마이페이지 알림 설정 수정
     public Boolean updateSettings(final Long memberId, final NotificationDTO notificationDTO) {
-        final Notification notification = notificationRepository.findFirstByMemberId(memberId);
+        Notification notification = notificationRepository.findFirstByMemberIdAndType(memberId, "SETTING");
 
         if (notification == null) {
-            throw new NotFoundException("알림 설정을 찾을 수 없습니다.");
+            // 수정 시에도 데이터가 없다면 조회를 통해 생성 로직을 먼저 타게 하거나 여기서 생성합니다.
+            getSettings(memberId);
+            notification = notificationRepository.findFirstByMemberIdAndType(memberId, "SETTING");
         }
 
         // 명세서 요구사항: 전달된(Null이 아닌) 필드만 업데이트
@@ -153,6 +167,7 @@ public class NotificationService {
         //마이페이지: 알림 설정 필드 매핑 추가
         notificationDTO.setMeetingAlarm(notification.getMeetingAlarm());
         notificationDTO.setDeadlineAlarm(notification.getDeadlineAlarm());
+        notificationDTO.setFeedbackAlarm(notification.getFeedbackAlarm());
         notificationDTO.setAllAlarm(notification.getAllAlarm());
 
         //대시보드: 알림 필드 매핑 추가
@@ -175,6 +190,9 @@ public class NotificationService {
         }
         if (dto.getDeadlineAlarm() != null) {
             entity.setDeadlineAlarm(dto.getDeadlineAlarm());
+        }
+        if (dto.getFeedbackAlarm() != null) {
+            entity.setFeedbackAlarm(dto.getFeedbackAlarm());
         }
         if (dto.getAllAlarm() != null) {
             entity.setAllAlarm(dto.getAllAlarm());

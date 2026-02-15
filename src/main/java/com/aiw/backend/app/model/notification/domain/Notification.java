@@ -58,6 +58,9 @@ public class Notification {
   private Boolean deadlineAlarm = true;
 
   @Column
+  private Boolean feedbackAlarm = true; //AI 피드백 알림 추가
+
+  @Column
   private Boolean allAlarm = true;
 
   //대시보드 알림 필드 추가

@@ -11,6 +11,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     // 마이페이지용
     Notification findFirstByMemberId(Long id);
 
+    Notification findFirstByMemberIdAndType(Long memberId, String type);
+
     // 대시보드용
     // 특정 사용자의 알림 목록 조회 (최신순)
     List<Notification> findByMemberIdAndTypeIsNotOrderByCreatedAtDesc(Long memberId, String excludeType);
