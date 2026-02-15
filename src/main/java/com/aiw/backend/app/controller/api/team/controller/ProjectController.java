@@ -45,13 +45,10 @@ public class ProjectController {
     //삭제
     @PostMapping("/delete")
     public ResponseEntity<ProjectDTO> deleteProject(
-            @RequestParam(name = "id") final Long id,
-            @RequestHeader(value = "Authorization") String authHeader) {
+            @RequestParam(name = "id") final Long projectId,
+            @RequestParam(name = "memberId") final Long currentMemberId) { // Swagger에서 입력 가능
 
-        final Long currentMemberId = 1L;
-
-        final ProjectDTO deletedProject = projectService.delete(id, currentMemberId);
-
+        final ProjectDTO deletedProject = projectService.delete(projectId, currentMemberId);
         return ResponseEntity.ok(deletedProject);
     }
 }

@@ -66,9 +66,10 @@ public class TeamController {
     @Operation(summary = "팀 탈퇴 및 위임", description = "팀원이 탈퇴하며, 팀장일 경우 권한을 위임합니다.")
     public ResponseEntity<TeamDTO> leaveTeam(
             @PathVariable(name = "id") final Long id,
+            @RequestParam(name = "memberId") final Long memberId,
             @RequestBody TeamDTO teamDTO) {
         // 테스트용: 현재 로그인 유저가 ID: 2이라고 가정
-        return ResponseEntity.ok(teamService.leaveTeam(id, 2L, teamDTO.getDelegateMemberId()));
+        return ResponseEntity.ok(teamService.leaveTeam(id, memberId, teamDTO.getDelegateMemberId()));
     }
 
 }

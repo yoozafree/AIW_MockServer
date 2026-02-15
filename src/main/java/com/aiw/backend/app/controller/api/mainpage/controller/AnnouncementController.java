@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public class AnnouncementController {
     private final AnnouncementService announcementService;
@@ -19,11 +20,9 @@ public class AnnouncementController {
     @PostMapping
     public ResponseEntity<AnnouncementDTO> createAnnouncement(
             @RequestBody @Valid final AnnouncementDTO announcementDTO,
-            @RequestHeader("Authorization") String authHeader) {
+            @RequestParam(name = "memberId") final Long currentMemberId) { // 하드코딩 1L 제거
 
-        // 현재는 하드코딩된 ID 1L 사용 (나중에 payload/Security 연동)
-        final Long currentMemberId = 1L;
-
+        // DTO에 작성자 정보를 담아 서비스로 전달
         AnnouncementDTO created = announcementService.create(announcementDTO, currentMemberId);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
