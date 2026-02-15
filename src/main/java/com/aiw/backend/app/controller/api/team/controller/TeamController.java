@@ -33,9 +33,10 @@ public class TeamController {
     }
 
     @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createTeam(@RequestBody @Valid final TeamDTO teamDTO) {
-        return new ResponseEntity<>(teamService.create(teamDTO), HttpStatus.CREATED);
+    public ResponseEntity<TeamDTO> createTeam(@RequestBody @Valid final TeamDTO teamDTO) {
+        // 이제 서비스가 TeamDTO를 반환함
+        final TeamDTO createdTeam = teamService.create(teamDTO);
+        return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
