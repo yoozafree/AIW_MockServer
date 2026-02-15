@@ -34,9 +34,9 @@ public class MemberController {
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createMember(@RequestBody @Valid final MemberDTO memberDTO) {
-        final Long createdId = memberService.create(memberDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+    public ResponseEntity<MemberDTO> createMember(@RequestBody @Valid final MemberDTO memberDTO) {
+        final MemberDTO createdMember = memberService.create(memberDTO);
+        return new ResponseEntity<>(createdMember, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
