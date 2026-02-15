@@ -1,4 +1,4 @@
-package com.aiw.backend.config;
+package com.aiw.backend.infra.config;
 
 import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.aiw.backend.config;
+package com.aiw.backend.infra.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
