@@ -32,7 +32,7 @@ public class Meeting {
   private String agenda;
 
   @Column(nullable = false)
-  private LocalDateTime schduledAt;
+  private LocalDateTime scheduledAt;
 
   @Column(nullable = false)
   private LocalDateTime startedAt;

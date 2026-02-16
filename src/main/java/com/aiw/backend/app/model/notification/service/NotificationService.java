@@ -37,7 +37,7 @@ public class NotificationService {
     public NotificationDTO getSettings(final Long memberId) {
         Notification notification = notificationRepository.findFirstByMemberIdAndType(memberId, "SETTING");
 
-        // 2. 만약 없다면 (처음 조회하는 유저라면) 기본값으로 생성해줍니다.
+        // 만약 없다면 (처음 조회하는 유저라면) 기본값으로 생성해줍니다.
         if (notification == null) {
             final Member member = memberRepository.findById(memberId)
                     .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
