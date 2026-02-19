@@ -18,7 +18,7 @@ public class MeetingDTO {
     private String agenda;
 
     @NotNull
-    private LocalDateTime schduledAt;
+    private LocalDateTime scheduledAt;
 
     @NotNull
     private LocalDateTime startedAt;

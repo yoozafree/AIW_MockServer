@@ -49,10 +49,20 @@ public class NotificationService {
             notification.setAllAlarm(true);
             notification.setMeetingAlarm(true);
             notification.setDeadlineAlarm(true);
-            notification.setFeedbackAlarm(true); // 새 필드 추가
+            notification.setFeedbackAlarm(true);
+            notification.setAlarmTimeOption("1시간 전"); // 기본값 설정
+            notification.setCustomAlarmMinutes(0);
             notification.setContent("USER_SETTINGS");
 
             notificationRepository.save(notification);
+        } else {
+            // 기존 데이터가 null일 경우 응답 직전에 기본값 채워주기
+            if (notification.getAlarmTimeOption() == null) {
+                notification.setAlarmTimeOption("1시간 전");
+            }
+            if (notification.getCustomAlarmMinutes() == null) {
+                notification.setCustomAlarmMinutes(0);
+            }
         }
 
         return mapToDTO(notification, new NotificationDTO());
@@ -174,6 +184,9 @@ public class NotificationService {
         notificationDTO.setFeedbackAlarm(notification.getFeedbackAlarm());
         notificationDTO.setAllAlarm(notification.getAllAlarm());
 
+        notificationDTO.setAlarmTimeOption(notification.getAlarmTimeOption());
+        notificationDTO.setCustomAlarmMinutes(notification.getCustomAlarmMinutes());
+
         //대시보드: 알림 필드 매핑 추가
         notificationDTO.setType(notification.getType());
         notificationDTO.setTitle(notification.getTitle());
@@ -200,6 +213,13 @@ public class NotificationService {
         }
         if (dto.getAllAlarm() != null) {
             entity.setAllAlarm(dto.getAllAlarm());
+        }
+
+        if (dto.getAlarmTimeOption() != null) {
+            entity.setAlarmTimeOption(dto.getAlarmTimeOption());
+        }
+        if (dto.getCustomAlarmMinutes() != null) {
+            entity.setCustomAlarmMinutes(dto.getCustomAlarmMinutes());
         }
     }
 

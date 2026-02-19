@@ -29,6 +29,8 @@ public class NotificationDTO {
     private Boolean deadlineAlarm;
     private Boolean feedbackAlarm;
     private Boolean allAlarm;
+    private String alarmTimeOption;
+    private Integer customAlarmMinutes;
     //수정 성공 여부 응답용 필드
     private Boolean updated;
 
