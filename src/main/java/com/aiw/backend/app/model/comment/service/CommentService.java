@@ -1,10 +1,13 @@
 package com.aiw.backend.app.model.comment.service;
 
 
+import com.aiw.backend.app.model.action_item.repository.ActionItemRepository;
 import com.aiw.backend.app.model.comment.domain.Comment;
 import com.aiw.backend.app.model.comment.dto.CommentDTO;
+import com.aiw.backend.app.model.comment.dto.DailyBriefDTO;
 import com.aiw.backend.app.model.comment.dto.FeedbackDTO;
 import com.aiw.backend.app.model.comment.repository.CommentRepository;
+import com.aiw.backend.app.model.meeting.repository.MeetingRepository;
 import com.aiw.backend.app.model.meeting_summary.domain.MeetingSummary;
 import com.aiw.backend.app.model.meeting_summary.repository.MeetingSummaryRepository;
 import com.aiw.backend.app.model.member.domain.Member;
@@ -15,6 +18,11 @@ import com.aiw.backend.util.ReferencedException;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
 
 @Service
 public class CommentService {
@@ -22,11 +30,60 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final MeetingSummaryRepository meetingSummaryRepository;
+    private final ActionItemRepository actionItemRepository;
+    private final MeetingRepository meetingRepository;
 
-    public CommentService(final CommentRepository commentRepository, final MemberRepository memberRepository, final MeetingSummaryRepository meetingSummaryRepository) {
+    public CommentService(final CommentRepository commentRepository, final MemberRepository memberRepository, final MeetingSummaryRepository meetingSummaryRepository
+    , final ActionItemRepository actionItemRepository,
+                          final MeetingRepository meetingRepository) {
         this.commentRepository = commentRepository;
         this.memberRepository = memberRepository;
         this.meetingSummaryRepository = meetingSummaryRepository;
+        this.actionItemRepository = actionItemRepository;
+        this.meetingRepository = meetingRepository;
+    }
+
+    //대시보드: daily brief
+    public DailyBriefDTO getDailyBrief(final Long memberId) {
+        // 1. 시간 범위 설정 (오늘)
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+
+        // 2. AI 데일리 코멘트 조회 (Comment 테이블 - DAILY_COMMENT)
+        Comment comment = commentRepository.findFirstByMemberIdAndRefTypeOrderByIdDesc(memberId, "DAILY_COMMENT")
+                .orElseThrow(() -> new NotFoundException("오늘의 AI 데일리 코멘트가 없습니다."));
+
+        // 3. 오늘 예정된 회의 목록 조회 (Meeting 테이블)
+        List<DailyBriefDTO.MeetingInfoDTO> meetings = meetingRepository
+                .findByScheduledAtBetween(startOfDay, endOfDay).stream()
+                .map(m -> DailyBriefDTO.MeetingInfoDTO.builder()
+                        .meetingId(m.getId())
+                        .agenda(m.getAgenda())
+                        .scheduledAt(m.getScheduledAt())
+                        .build())
+                .toList();
+
+        // 4. 오늘 마감인 투두 목록 조회 (ActionItem 테이블)
+        List<DailyBriefDTO.TodoInfoDTO> todos = actionItemRepository
+                .findByAssigneeMemberIdAndDueDateBetween(memberId, startOfDay, endOfDay).stream()
+                .map(a -> DailyBriefDTO.TodoInfoDTO.builder()
+                        .todoId(a.getId())
+                        .title(a.getTitle())
+                        .dueDate(a.getDueDate())
+                        .build())
+                .toList();
+
+        // 5. 최종 조립
+        return DailyBriefDTO.builder()
+                .id(comment.getId()) // Comment의 ID를 브리프 ID로 활용
+                .date(LocalDateTime.now())
+                .summary("오늘 예정된 회의는 " + meetings.size() + "건, 마감 투두는 " + todos.size() + "건입니다.")
+                .dailyComment(mapToDTO(comment, new CommentDTO()))
+                .meetings(meetings)
+                .todos(todos)
+                .memberId(memberId)
+                .activated(comment.getActivated())
+                .build();
     }
 
     // 특정 타입의 코멘트 가져오기 (피드백 요약 등)

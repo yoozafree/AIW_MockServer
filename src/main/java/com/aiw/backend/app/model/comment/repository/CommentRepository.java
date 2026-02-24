@@ -10,4 +10,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Comment findFirstByMemberId(Long id);
     Optional<Comment> findByMemberIdAndRefTypeAndRefId(Long memberId, String refType, Long refId);
 
+    Optional<Comment> findFirstByMemberIdAndRefTypeOrderByIdDesc(Long memberId, String refType);
 }

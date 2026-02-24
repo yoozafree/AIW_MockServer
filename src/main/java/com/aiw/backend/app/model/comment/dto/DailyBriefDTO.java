@@ -13,15 +13,12 @@ import java.util.List;
 public class DailyBriefDTO {
 
     private Long id;
-
     private LocalDateTime date; //브리핑 기준 날짜
-
     private String summary; //오늘의 일정 요약
 
-    private String aiComment; //AI 데일리 코멘트
+    private CommentDTO dailyComment;
 
     private List<MeetingInfoDTO> meetings;
-
     private List<TodoInfoDTO> todos; //오늘 마감 투두 목록
 
     private Long memberId;
