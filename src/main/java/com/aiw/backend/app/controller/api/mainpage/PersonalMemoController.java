@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.mainpage.controller;
+package com.aiw.backend.app.controller.api.mainpage;
 
 import com.aiw.backend.app.model.personal_memo.dto.PersonalMemoDTO;
 import com.aiw.backend.app.model.personal_memo.service.PersonalMemoService;

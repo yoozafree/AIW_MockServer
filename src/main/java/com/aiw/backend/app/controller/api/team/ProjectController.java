@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.team.controller;
+package com.aiw.backend.app.controller.api.team;
 
 import com.aiw.backend.app.model.project.dto.ProjectDTO;
 import com.aiw.backend.app.model.project.service.ProjectService;

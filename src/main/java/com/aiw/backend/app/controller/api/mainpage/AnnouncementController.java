@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.mainpage.controller;
+package com.aiw.backend.app.controller.api.mainpage;
 
 import com.aiw.backend.app.model.announcement.dto.AnnouncementDTO;
 import com.aiw.backend.app.model.announcement.service.AnnouncementService;

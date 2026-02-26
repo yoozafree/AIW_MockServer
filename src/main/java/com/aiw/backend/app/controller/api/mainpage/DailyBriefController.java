@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.mainpage.controller;
+package com.aiw.backend.app.controller.api.mainpage;
 
 import com.aiw.backend.app.model.comment.dto.DailyBriefDTO;
 import com.aiw.backend.app.model.comment.service.CommentService;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/dashboard/daily-brief", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/dashboard/dailyBrief", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DailyBriefController {
     private final CommentService commentService;
 
