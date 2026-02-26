@@ -2,7 +2,7 @@ package com.aiw.backend.app.model.stt_state.service;
 
 import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
-import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
+import com.aiw.backend.app.model.meeting.repository.MeetingRepository;
 import com.aiw.backend.app.model.stt_state.domain.SttState;
 import com.aiw.backend.app.model.stt_state.dto.SttStateDTO;
 import com.aiw.backend.app.model.stt_state.repos.SttStateRepository;

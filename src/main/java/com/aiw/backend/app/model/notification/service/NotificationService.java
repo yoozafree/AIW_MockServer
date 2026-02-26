@@ -35,22 +35,46 @@ public class NotificationService {
 
     //마이페이지: 알림 설정 조회
     public NotificationDTO getSettings(final Long memberId) {
-        // 해당 멤버의 알림 설정 엔티티를 찾습니다.
-        // findFirstByMemberId 또는 findByMemberId (Repository에 정의 필요) 사용
-        final Notification notification = notificationRepository.findFirstByMemberId(memberId);
+        Notification notification = notificationRepository.findFirstByMemberIdAndType(memberId, "SETTING");
 
+        // 만약 없다면 (처음 조회하는 유저라면) 기본값으로 생성해줍니다.
         if (notification == null) {
-            throw new NotFoundException("알림 설정을 찾을 수 없습니다.");
+            final Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+
+            notification = new Notification();
+            notification.setMember(member);
+            notification.setType("SETTING");
+            notification.setActivated(true);
+            notification.setAllAlarm(true);
+            notification.setMeetingAlarm(true);
+            notification.setDeadlineAlarm(true);
+            notification.setFeedbackAlarm(true);
+            notification.setAlarmTimeOption("1시간 전"); // 기본값 설정
+            notification.setCustomAlarmMinutes(0);
+            notification.setContent("USER_SETTINGS");
+
+            notificationRepository.save(notification);
+        } else {
+            // 기존 데이터가 null일 경우 응답 직전에 기본값 채워주기
+            if (notification.getAlarmTimeOption() == null) {
+                notification.setAlarmTimeOption("1시간 전");
+            }
+            if (notification.getCustomAlarmMinutes() == null) {
+                notification.setCustomAlarmMinutes(0);
+            }
         }
 
         return mapToDTO(notification, new NotificationDTO());
     }
     //마이페이지 알림 설정 수정
     public Boolean updateSettings(final Long memberId, final NotificationDTO notificationDTO) {
-        final Notification notification = notificationRepository.findFirstByMemberId(memberId);
+        Notification notification = notificationRepository.findFirstByMemberIdAndType(memberId, "SETTING");
 
         if (notification == null) {
-            throw new NotFoundException("알림 설정을 찾을 수 없습니다.");
+            // 수정 시에도 데이터가 없다면 조회를 통해 생성 로직을 먼저 타게 하거나 여기서 생성합니다.
+            getSettings(memberId);
+            notification = notificationRepository.findFirstByMemberIdAndType(memberId, "SETTING");
         }
 
         // 명세서 요구사항: 전달된(Null이 아닌) 필드만 업데이트
@@ -59,24 +83,18 @@ public class NotificationService {
         return true;
     }
 
-    //대시보드: 알림 조회
+    // 대시보드: 알림 조회
     public List<NotificationDTO> findAllByMember(final Long memberId) {
+
         final List<Notification> notifications = notificationRepository
-                .findByMemberIdAndTypeIsNotOrderByDateCreatedDesc(memberId, "SETTING");
+                .findByMemberIdAndTypeIsNotOrderByCreatedAtDesc(memberId, "SETTING");
 
         return notifications.stream()
                 .map(notification -> mapToDTO(notification, new NotificationDTO()))
                 .toList();
     }
 
-    //대시보드: 알림 읽음 처리
-    public void markAsRead(final Long notificationId) {
-        final Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new NotFoundException("알림을 찾을 수 없습니다."));
 
-        notification.setIsRead(true);
-        notificationRepository.save(notification);
-    }
 
     //팀장 공지 알림
     public void createAnnouncementNotification(final Long teamId, final Long authorId,
@@ -96,8 +114,9 @@ public class NotificationService {
             notification.setType("ANNOUNCEMENT");
             notification.setTitle(title);
             notification.setContent(message);
-            notification.setIsRead(false);
             notification.setRelatedId(relatedId);
+
+            notification.setActivated(true);
 
             notificationRepository.save(notification);
         });
@@ -114,8 +133,9 @@ public class NotificationService {
         notification.setType("FEEDBACK");
         notification.setTitle(title);
         notification.setContent(message);
-        notification.setIsRead(false);
         notification.setRelatedId(relatedId);
+
+        notification.setActivated(true);
 
         notificationRepository.save(notification);
     }
@@ -161,11 +181,14 @@ public class NotificationService {
         //마이페이지: 알림 설정 필드 매핑 추가
         notificationDTO.setMeetingAlarm(notification.getMeetingAlarm());
         notificationDTO.setDeadlineAlarm(notification.getDeadlineAlarm());
+        notificationDTO.setFeedbackAlarm(notification.getFeedbackAlarm());
         notificationDTO.setAllAlarm(notification.getAllAlarm());
+
+        notificationDTO.setAlarmTimeOption(notification.getAlarmTimeOption());
+        notificationDTO.setCustomAlarmMinutes(notification.getCustomAlarmMinutes());
 
         //대시보드: 알림 필드 매핑 추가
         notificationDTO.setType(notification.getType());
-        notificationDTO.setIsRead(notification.getIsRead());
         notificationDTO.setTitle(notification.getTitle());
         notificationDTO.setTeamId(notification.getTeam() == null ? null : notification.getTeam().getId());
         notificationDTO.setRelatedId(notification.getRelatedId());
@@ -185,8 +208,18 @@ public class NotificationService {
         if (dto.getDeadlineAlarm() != null) {
             entity.setDeadlineAlarm(dto.getDeadlineAlarm());
         }
+        if (dto.getFeedbackAlarm() != null) {
+            entity.setFeedbackAlarm(dto.getFeedbackAlarm());
+        }
         if (dto.getAllAlarm() != null) {
             entity.setAllAlarm(dto.getAllAlarm());
+        }
+
+        if (dto.getAlarmTimeOption() != null) {
+            entity.setAlarmTimeOption(dto.getAlarmTimeOption());
+        }
+        if (dto.getCustomAlarmMinutes() != null) {
+            entity.setCustomAlarmMinutes(dto.getCustomAlarmMinutes());
         }
     }
 
@@ -200,9 +233,6 @@ public class NotificationService {
         // 대시보드 필드 매핑
         if (notificationDTO.getType() != null) {
             notification.setType(notificationDTO.getType());
-        }
-        if (notificationDTO.getIsRead() != null) {
-            notification.setIsRead(notificationDTO.getIsRead());
         }
         if (notificationDTO.getTitle() != null) {
             notification.setTitle(notificationDTO.getTitle());

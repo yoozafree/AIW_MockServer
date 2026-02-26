@@ -52,21 +52,23 @@ public class TeamService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final TeamDTO teamDTO) {
-        // 1. 팀 엔티티 생성 및 기본 매핑 (이름 등)
+    @Transactional
+    public TeamDTO create(final TeamDTO teamDTO) {
+        // 1. 팀 엔티티 생성 및 기본 매핑
         final Team team = new Team();
         team.setName(teamDTO.getName());
-        team.setInviteCode(UUID.randomUUID().toString().substring(0, 8));
+        team.setInviteCode(UUID.randomUUID().toString().substring(0, 8)); // 8자리 랜덤 코드
         team.setActivated(true);
 
         final Team savedTeam = teamRepository.save(team);
 
-        // 3. 생성자(현재 로그인 유저)를 TeamMember로 등록
+        // 2. 생성자(현재 로그인 유저) 조회
+        // teamDTO에 leaderId가 담겨 온다고 가정합니다.
         final Long currentMemberId = teamDTO.getLeaderId();
-
         final Member creator = memberRepository.findById(currentMemberId)
                 .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다. (ID: " + currentMemberId + ")"));
 
+        // 3. TeamMember 등록 (생성자를 LEADER로 설정)
         final TeamMember teamMember = new TeamMember();
         teamMember.setMember(creator);
         teamMember.setTeam(savedTeam);
@@ -75,7 +77,14 @@ public class TeamService {
 
         teamMemberRepository.save(teamMember);
 
-        return savedTeam.getId();
+        // 4. 결과 반환: ID만 주는 것이 아니라 상세 정보 DTO를 빌드하여 반환
+        return TeamDTO.builder()
+                .id(savedTeam.getId())
+                .name(savedTeam.getName())
+                .inviteCode(savedTeam.getInviteCode())
+                .leaderId(creator.getId())
+                .leaderName(creator.getName())
+                .build();
     }
 
     //팀 멤버 추가

@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.mypage.controller;
+package com.aiw.backend.app.controller.api.mypage;
 
 import com.aiw.backend.app.model.notification.dto.NotificationDTO;
 import com.aiw.backend.app.model.notification.service.NotificationService;
@@ -19,20 +19,20 @@ public class NotificationSettingsController {
     //마이페이지: 알림 설정 조회
     @GetMapping("/settings")
     @Operation(summary = "알림 설정 조회", description = "마이페이지에서 사용자의 회의, 마감, 전체 알림 설정을 조회합니다.")
-    public ResponseEntity<NotificationDTO> getSettings() {
-        // 실제 운영 시에는 토큰에서 정보를 가져오지만, 현재는 테스트용 1L 고정
-        final Long currentMemberId = 1L;
-        return ResponseEntity.ok(notificationService.getSettings(currentMemberId));
+    public ResponseEntity<NotificationDTO> getSettings(@RequestParam(name = "memberId") final Long memberId) {
+        return ResponseEntity.ok(notificationService.getSettings(memberId));
     }
 
     //마이페이지: 알림 설정 수정
     @PostMapping("/settings")
     @Operation(summary = "알림 설정 수정", description = "사용자가 원하는 알림 항목(회의, 마감, 전체)을 켜거나 끕니다.")
-    public ResponseEntity<NotificationDTO> updateSettings(@RequestBody final NotificationDTO notificationDTO) {
-        final Long currentMemberId = 1L;
-        final Boolean isUpdated = notificationService.updateSettings(currentMemberId, notificationDTO);
+    public ResponseEntity<NotificationDTO> updateSettings(
+            @RequestParam(name = "memberId") final Long memberId,
+            @RequestBody final NotificationDTO notificationDTO) {
 
-        // 명세서에 맞춰 updated 필드에 결과 담아서 반환
+        final Boolean isUpdated = notificationService.updateSettings(memberId, notificationDTO);
+
+        // 수정 성공 여부와 함께 업데이트된 정보를 다시 조회해서 보낼 수도 있고, 명세대로 응답할 수 있습니다.
         return ResponseEntity.ok(NotificationDTO.builder()
                 .updated(isUpdated)
                 .build());

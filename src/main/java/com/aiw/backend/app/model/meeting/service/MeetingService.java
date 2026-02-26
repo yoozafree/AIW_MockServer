@@ -1,9 +1,9 @@
 package com.aiw.backend.app.model.meeting.service;
 
+import com.aiw.backend.app.model.meeting.repository.MeetingRepository;
 import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
 import com.aiw.backend.app.model.meeting.dto.MeetingDTO;
-import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
 import com.aiw.backend.util.CustomCollectors;
 import com.aiw.backend.util.NotFoundException;
 import java.util.List;
@@ -61,21 +61,25 @@ public class MeetingService {
     private MeetingDTO mapToDTO(final Meeting meeting, final MeetingDTO meetingDTO) {
         meetingDTO.setId(meeting.getId());
         meetingDTO.setAgenda(meeting.getAgenda());
-        meetingDTO.setSchduledAt(meeting.getSchduledAt());
+        meetingDTO.setScheduledAt(meeting.getScheduledAt());
         meetingDTO.setStartedAt(meeting.getStartedAt());
         meetingDTO.setEndedAt(meeting.getEndedAt());
         meetingDTO.setStatus(meeting.getStatus());
         meetingDTO.setActivated(meeting.getActivated());
+        // 추가: DB의 값을 DTO로 옮겨줌
+        meetingDTO.setCreatedType(meeting.getCreatedType());
         return meetingDTO;
     }
 
     private Meeting mapToEntity(final MeetingDTO meetingDTO, final Meeting meeting) {
         meeting.setAgenda(meetingDTO.getAgenda());
-        meeting.setSchduledAt(meetingDTO.getSchduledAt());
+        meeting.setScheduledAt(meetingDTO.getScheduledAt());
         meeting.setStartedAt(meetingDTO.getStartedAt());
         meeting.setEndedAt(meetingDTO.getEndedAt());
         meeting.setStatus(meetingDTO.getStatus());
         meeting.setActivated(meetingDTO.getActivated());
+        // 추가: 클라이언트가 보낸 값을 엔티티에 세팅
+        meeting.setCreatedType(meetingDTO.getCreatedType());
         return meeting;
     }
 

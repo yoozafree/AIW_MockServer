@@ -18,7 +18,7 @@ public class MeetingDTO {
     private String agenda;
 
     @NotNull
-    private LocalDateTime schduledAt;
+    private LocalDateTime scheduledAt;
 
     @NotNull
     private LocalDateTime startedAt;
@@ -29,6 +29,10 @@ public class MeetingDTO {
     @NotNull
     @Size(max = 255)
     private String status;
+
+    @NotNull
+    @Size(max = 255)
+    private String createdType;
 
     @NotNull
     private Boolean activated;

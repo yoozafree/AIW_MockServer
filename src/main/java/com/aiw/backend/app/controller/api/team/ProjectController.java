@@ -1,7 +1,8 @@
-package com.aiw.backend.app.controller.api.team.controller;
+package com.aiw.backend.app.controller.api.team;
 
 import com.aiw.backend.app.model.project.dto.ProjectDTO;
 import com.aiw.backend.app.model.project.service.ProjectService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,5 +40,15 @@ public class ProjectController {
 
         final ProjectDTO updatedProject = projectService.update(id, projectDTO);
         return ResponseEntity.ok(updatedProject);
+    }
+
+    //삭제
+    @PostMapping("/delete")
+    public ResponseEntity<ProjectDTO> deleteProject(
+            @RequestParam(name = "id") final Long projectId,
+            @RequestParam(name = "memberId") final Long currentMemberId) { // Swagger에서 입력 가능
+
+        final ProjectDTO deletedProject = projectService.delete(projectId, currentMemberId);
+        return ResponseEntity.ok(deletedProject);
     }
 }

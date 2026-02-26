@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.mainpage.controller;
+package com.aiw.backend.app.controller.api.mainpage;
 
 import com.aiw.backend.app.model.notification.dto.NotificationDTO;
 import com.aiw.backend.app.model.notification.service.NotificationService;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/notifications", produces = MediaType.APPLICATION_JSON_VALUE)
-public class NotificationResource {
+public class NotificationController {
 
     private final NotificationService notificationService;
 
-    public NotificationResource(final NotificationService notificationService) {
+    public NotificationController(final NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 

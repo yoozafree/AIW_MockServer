@@ -4,15 +4,20 @@ import com.aiw.backend.app.model.project.dto.ProjectDTO;
 import com.aiw.backend.app.model.project.dto.TodoDTO;
 import com.aiw.backend.app.model.team.domain.Team;
 import com.aiw.backend.app.model.team.repository.TeamRepository;
+import com.aiw.backend.app.model.team_member.domain.TeamMember;
+import com.aiw.backend.app.model.team_member.repository.TeamMemberRepository;
 import com.aiw.backend.events.BeforeDeleteTeam;
 import com.aiw.backend.app.model.project.domain.Project;
 import com.aiw.backend.app.model.project.repository.ProjectRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,11 +28,13 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     //팀 확인용 추가
     private final TeamRepository teamRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
-    public ProjectService(final ProjectRepository projectRepository, final TeamRepository teamRepository) {
+    public ProjectService(final ProjectRepository projectRepository, final TeamRepository teamRepository, final TeamMemberRepository teamMemberRepository) {
 
         this.projectRepository = projectRepository;
         this.teamRepository = teamRepository;
+        this.teamMemberRepository = teamMemberRepository;
     }
 
     @Transactional
@@ -100,6 +107,32 @@ public class ProjectService {
         // 4. 수정된 전체 데이터를 조회(get)해서 반환 (진행률과 투두 리스트 포함)
         return get(id);
     }
+    @Transactional
+    public ProjectDTO delete(final Long projectId, final Long currentMemberId) {
+        final Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 프로젝트입니다."));
+
+        if (project.getActivated() != null && !project.getActivated()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 삭제된 프로젝트입니다.");
+        }
+
+        TeamMember teamMember = teamMemberRepository.findByTeamIdAndMemberId(project.getTeam().getId(), currentMemberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "팀원 정보를 찾을 수 없습니다."));
+
+        if (!"LEADER".equals(teamMember.getRole())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "프로젝트 삭제 권한이 없습니다. 팀장만 삭제할 수 있습니다.");
+        }
+
+        project.setActivated(false);
+        projectRepository.save(project);
+
+        ProjectDTO response = new ProjectDTO();
+        response.setId(project.getId());
+        response.setActivated(false);
+        response.setDeletedAt(OffsetDateTime.now());
+
+        return response;
+    }
 
     private TodoDTO createTodo(String task, boolean completed) {
         TodoDTO todo = new TodoDTO();
@@ -115,6 +148,8 @@ public class ProjectService {
         projectDTO.setTeamId(project.getTeam().getId());
         return projectDTO;
     }
+
+
 
     @EventListener(BeforeDeleteTeam.class)
     public void on(final BeforeDeleteTeam event) {

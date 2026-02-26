@@ -3,7 +3,7 @@ package com.aiw.backend.app.model.meeting_participant.service;
 import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
-import com.aiw.backend.app.model.meeting.repos.MeetingRepository;
+import com.aiw.backend.app.model.meeting.repository.MeetingRepository;
 import com.aiw.backend.app.model.meeting_participant.domain.MeetingParticipant;
 import com.aiw.backend.app.model.meeting_participant.dto.MeetingParticipantDTO;
 import com.aiw.backend.app.model.meeting_participant.repository.MeetingParticipantRepository;

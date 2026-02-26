@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -40,10 +41,29 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException("삭제되었거나 존재하지 않는 회원입니다."));
     }
 
-    public Long create(final MemberDTO memberDTO) {
+    @Transactional
+    public MemberDTO create(final MemberDTO memberDTO) {
+        // 1. DTO -> Entity 변환
         final Member member = new Member();
-        mapToEntity(memberDTO, member);
-        return memberRepository.save(member).getId();
+        member.setProvider(memberDTO.getProvider());
+        member.setEmail(memberDTO.getEmail());
+        member.setName(memberDTO.getName());
+        member.setInterestedField(memberDTO.getInterestedField());
+        member.setActivated(true); // 가입 시 기본 활성화
+
+        // 2. DB 저장
+        final Member savedMember = memberRepository.save(member);
+
+        // 3. Entity -> DTO 변환 후 반환
+        return MemberDTO.builder()
+                .id(savedMember.getId())
+                .provider(savedMember.getProvider())
+                .email(savedMember.getEmail())
+                .name(savedMember.getName())
+                .interestedField(savedMember.getInterestedField())
+                .activated(savedMember.getActivated())
+                .message("회원가입이 완료되었습니다.") // 커스텀 메시지 포함 가능
+                .build();
     }
 
     public void update(final Long id, final MemberDTO memberDTO) {

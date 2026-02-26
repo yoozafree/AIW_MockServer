@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.team.controller;
+package com.aiw.backend.app.controller.api.team;
 
 import com.aiw.backend.app.model.team_member.dto.TeamMemberDTO;
 import com.aiw.backend.app.model.team_member.service.TeamMemberService;

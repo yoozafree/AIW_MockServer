@@ -1,4 +1,4 @@
-package com.aiw.backend.app.controller.api.team.controller;
+package com.aiw.backend.app.controller.api.team;
 
 import com.aiw.backend.app.model.team.dto.TeamDTO;
 import com.aiw.backend.app.model.team.service.TeamService;
@@ -33,9 +33,10 @@ public class TeamController {
     }
 
     @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createTeam(@RequestBody @Valid final TeamDTO teamDTO) {
-        return new ResponseEntity<>(teamService.create(teamDTO), HttpStatus.CREATED);
+    public ResponseEntity<TeamDTO> createTeam(@RequestBody @Valid final TeamDTO teamDTO) {
+        // 이제 서비스가 TeamDTO를 반환함
+        final TeamDTO createdTeam = teamService.create(teamDTO);
+        return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -66,9 +67,10 @@ public class TeamController {
     @Operation(summary = "팀 탈퇴 및 위임", description = "팀원이 탈퇴하며, 팀장일 경우 권한을 위임합니다.")
     public ResponseEntity<TeamDTO> leaveTeam(
             @PathVariable(name = "id") final Long id,
+            @RequestParam(name = "memberId") final Long memberId,
             @RequestBody TeamDTO teamDTO) {
         // 테스트용: 현재 로그인 유저가 ID: 2이라고 가정
-        return ResponseEntity.ok(teamService.leaveTeam(id, 2L, teamDTO.getDelegateMemberId()));
+        return ResponseEntity.ok(teamService.leaveTeam(id, memberId, teamDTO.getDelegateMemberId()));
     }
 
 }

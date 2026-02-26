@@ -58,14 +58,22 @@ public class Notification {
   private Boolean deadlineAlarm = true;
 
   @Column
+  private Boolean feedbackAlarm = true; //AI 피드백 알림 추가
+
+  @Column
   private Boolean allAlarm = true;
 
   //대시보드 알림 필드 추가
   @Column(nullable = false, length = 50)
   private String type; // "SETTING", "ANNOUNCEMENT", "FEEDBACK", "TODO", "MEETING" 등
 
+  // 알림 시간 옵션 (예: "3일 전", "1시간 전", "직접 설정")
+  @Column(length = 20)
+  private String alarmTimeOption;
+
+  // 직접 설정 시 '분' 단위 저장 (예: 45)
   @Column
-  private Boolean isRead = false; // 읽음 여부
+  private Integer customAlarmMinutes;
 
   @Column(length = 200)
   private String title; // 알림 제목
