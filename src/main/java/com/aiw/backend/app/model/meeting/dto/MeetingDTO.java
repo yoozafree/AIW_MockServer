@@ -31,6 +31,10 @@ public class MeetingDTO {
     private String status;
 
     @NotNull
+    @Size(max = 255)
+    private String createdType;
+
+    @NotNull
     private Boolean activated;
 
 }

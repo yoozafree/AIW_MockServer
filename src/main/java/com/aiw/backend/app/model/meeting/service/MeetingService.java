@@ -66,6 +66,8 @@ public class MeetingService {
         meetingDTO.setEndedAt(meeting.getEndedAt());
         meetingDTO.setStatus(meeting.getStatus());
         meetingDTO.setActivated(meeting.getActivated());
+        // 추가: DB의 값을 DTO로 옮겨줌
+        meetingDTO.setCreatedType(meeting.getCreatedType());
         return meetingDTO;
     }
 
@@ -76,6 +78,8 @@ public class MeetingService {
         meeting.setEndedAt(meetingDTO.getEndedAt());
         meeting.setStatus(meetingDTO.getStatus());
         meeting.setActivated(meetingDTO.getActivated());
+        // 추가: 클라이언트가 보낸 값을 엔티티에 세팅
+        meeting.setCreatedType(meetingDTO.getCreatedType());
         return meeting;
     }
 
