@@ -1,6 +1,5 @@
 package com.aiw.backend.app.model.member.service;
 
-import com.aiw.backend.events.BeforeDeleteMember;
 import com.aiw.backend.app.model.member.domain.Member;
 import com.aiw.backend.app.model.member.dto.MemberDTO;
 import com.aiw.backend.app.model.member.repository.MemberRepository;
@@ -93,9 +92,23 @@ public class MemberService {
         final Member member = memberRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
 
+        //tag 4개까지 제한하는 로직
+        if (memberDTO.getInterestedField() != null && !memberDTO.getInterestedField().isBlank()) {
+            String[] tags = memberDTO.getInterestedField().split(",");
+
+            // 공백만 있는 태그 제외하고 순수 태그 개수 카운트
+            long validTagCount = java.util.Arrays.stream(tags)
+                    .filter(tag -> !tag.trim().isEmpty())
+                    .count();
+
+            if (validTagCount > 4) {
+                // 400 Bad Request를 유도하는 예외 발생
+                throw new IllegalArgumentException("관심 분야는 최대 4개까지만 저장할 수 있습니다.");
+            }
+        }
+
         // 마이페이지 수정 가능 필드만 매핑
         mapMyInfoToEntity(memberDTO, member);
-
         memberRepository.save(member);
     }
 
