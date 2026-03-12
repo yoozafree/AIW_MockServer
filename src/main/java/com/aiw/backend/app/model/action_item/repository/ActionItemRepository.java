@@ -16,5 +16,4 @@ public interface ActionItemRepository extends JpaRepository<ActionItem, Long> {
   // AI 데일리 피드백용: 오늘 마감인 투두 목록 조회, 담당자별
   List<ActionItem> findByAssigneeMemberIdAndDueDateBetween(Long memberId, LocalDateTime start, LocalDateTime end);
 
-  List<ActionItem> findByAssigneeMemberId(Long assigneeMemberId);
 }

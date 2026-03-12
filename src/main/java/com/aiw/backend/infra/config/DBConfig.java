@@ -19,7 +19,7 @@ import tools.jackson.databind.ObjectMapper;
 @EntityScan("com.aiw.backend")
 @EnableJpaRepositories("com.aiw.backend")
 @EnableTransactionManagement
-@EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
+//@EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
 public class DBConfig {
 
     @Bean(name = "auditingDateTimeProvider")

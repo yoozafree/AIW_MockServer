@@ -27,6 +27,9 @@ public class Member {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(nullable = true) // 임시
+  private String password;
+
   @Column(nullable = false)
   private String provider;
 

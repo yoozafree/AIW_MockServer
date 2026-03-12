@@ -1,5 +1,6 @@
 package com.aiw.backend.infra.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,5 +18,10 @@ public class JacksonConfig {
                 .disable(DeserializationFeature.ACCEPT_FLOAT_AS_INT)
                 .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
     }
+
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper();
+  }
 
 }

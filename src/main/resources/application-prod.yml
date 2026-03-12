@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: prod
   datasource:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
@@ -6,3 +9,13 @@ spring:
     hikari:
       connection-timeout: 30000
       maximum-pool-size: 10
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      username: ${REDIS_USERNAME:default}
+      password: ${REDIS_PASSWORD}
+      ssl:
+        enabled: true
+  jwt:
+    secret: ${JWT_SECRET:local-dev-secret-change-me-please-32bytes-minimum}
