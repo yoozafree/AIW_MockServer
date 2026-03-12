@@ -4,7 +4,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
@@ -47,3 +47,13 @@ server:
 
 springdoc:
   pathsToMatch: /api/**
+
+logging:
+  level:
+    root: info
+    org:
+      hibernate:
+        SQL: info
+        type:
+          descriptor:
+            sql: info

@@ -5,24 +5,28 @@ import com.aiw.backend.app.model.action_item.service.ActionItemService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequestMapping(value = "/api/actionItems", produces = MediaType.APPLICATION_JSON_VALUE)
-@RequiredArgsConstructor
 public class ActionItemController {
 
-  private final ActionItemService actionItemService;
+  private ActionItemService actionItemService;
 
   @GetMapping
-  public ResponseEntity<List<ActionItemDTO>> getAllActionItems(@RequestParam(name = "memberId", required = false) final Long memberId) {
-    return ResponseEntity.ok(actionItemService.getActionItems(memberId));
+  public ResponseEntity<List<ActionItemDTO>> getAllActionItems() {
+    return ResponseEntity.ok(actionItemService.findAll());
   }
 
   @GetMapping("/{id}")
@@ -39,10 +43,10 @@ public class ActionItemController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ActionItemDTO> updateActionItem(@PathVariable(name = "id") final Long id,
+  public ResponseEntity<Long> updateActionItem(@PathVariable(name = "id") final Long id,
       @RequestBody @Valid final ActionItemDTO actionItemDTO) {
-    ActionItemDTO updatedDTO = actionItemService.update(id, actionItemDTO);
-    return ResponseEntity.ok(updatedDTO);
+    actionItemService.update(id, actionItemDTO);
+    return ResponseEntity.ok(id);
   }
 
   @DeleteMapping("/{id}")

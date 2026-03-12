@@ -27,13 +27,16 @@ public class Member {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(nullable = true) // 임시
+  private String password;
+
   @Column(nullable = false)
   private String provider;
 
   @Column(nullable = false, unique = true)
   private String email;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String name;
 
   @Column
