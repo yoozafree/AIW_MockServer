@@ -9,17 +9,18 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+//import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @Slf4j
 public class RedisConfig {
 
-  @Value("${spring.data.redis.port}")
+  @Value("${spring.data.redis.port:6379}")
   private int port;
 
-  @Value("${spring.data.redis.host}")
+  @Value("${spring.data.redis.host:localhost}")
   private String host;
 
   @Value("${spring.data.redis.username:}")
@@ -61,9 +62,8 @@ public class RedisConfig {
     template.setKeySerializer(keySer);
     template.setHashKeySerializer(keySer);
 
-    GenericJackson2JsonRedisSerializer valSer = new GenericJackson2JsonRedisSerializer();
-    template.setValueSerializer(valSer);
-    template.setHashValueSerializer(valSer);
+    template.setValueSerializer(RedisSerializer.json());
+    template.setHashValueSerializer(RedisSerializer.json());
 
     template.afterPropertiesSet();
     return template;

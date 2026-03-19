@@ -1,5 +1,7 @@
 package com.aiw.backend.app.model.project.service;
 
+import com.aiw.backend.app.model.action_item.domain.ActionItem;
+import com.aiw.backend.app.model.action_item.repository.ActionItemRepository;
 import com.aiw.backend.app.model.project.dto.ProjectDTO;
 import com.aiw.backend.app.model.project.dto.TodoDTO;
 import com.aiw.backend.app.model.team.domain.Team;
@@ -19,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
 
 @Service
@@ -29,12 +30,17 @@ public class ProjectService {
     //팀 확인용 추가
     private final TeamRepository teamRepository;
     private final TeamMemberRepository teamMemberRepository;
+    private final ActionItemRepository actionItemRepository;
 
-    public ProjectService(final ProjectRepository projectRepository, final TeamRepository teamRepository, final TeamMemberRepository teamMemberRepository) {
+    public ProjectService(final ProjectRepository projectRepository,
+                          final TeamRepository teamRepository,
+                          final TeamMemberRepository teamMemberRepository,
+                          final ActionItemRepository actionItemRepository) {
 
         this.projectRepository = projectRepository;
         this.teamRepository = teamRepository;
         this.teamMemberRepository = teamMemberRepository;
+        this.actionItemRepository = actionItemRepository;
     }
 
     @Transactional
@@ -67,21 +73,29 @@ public class ProjectService {
 
         ProjectDTO dto = mapToDTO(project, new ProjectDTO());
 
-        // 2. Mock 투두 데이터 생성 (실제 DB가 생기기 전까지)
-        List<TodoDTO> mockTodos = List.of(
-                createTodo("요구사항 분석", true),
-                createTodo("DB 설계", true),
-                createTodo("API 개발", false),
-                createTodo("FE 연결", false)
-        );
-        dto.setTodos(mockTodos);
+        // 2. 실제 DB의 ActionItem 데이터를 가져와서 TodoDTO로 변환
+        // (ActionItem 테이블에 meeting_id가 있고, meeting이 team_id를 가지므로 이를 활용)
+        List<ActionItem> actionItems = actionItemRepository.findByMeetingTeamId(project.getTeam().getId());
 
-        // 3. 진행률 계산 로직 (간단하지만 확실하게!)
-        long totalCount = mockTodos.size();
-        long completedCount = mockTodos.stream().filter(TodoDTO::isCompleted).count();
+        List<TodoDTO> todos = actionItems.stream()
+                .map(item -> {
+                    TodoDTO todo = new TodoDTO();
+                    todo.setTask(item.getTitle()); // title을 task로 매핑
+                    todo.setCompleted(item.getCompleted()); // tinyint(1) -> boolean 자동 매핑
+                    return todo;
+                })
+                .toList();
 
-        int progress = totalCount > 0 ? (int) ((completedCount * 100) / totalCount) : 0;
-        dto.setProgress(progress);
+        dto.setTodos(todos);
+
+        // 3. 실제 데이터를 기반으로 진행률 계산
+        if (!todos.isEmpty()) {
+            long completedCount = todos.stream().filter(TodoDTO::isCompleted).count();
+            int progress = (int) ((completedCount * 100) / todos.size());
+            dto.setProgress(progress);
+        } else {
+            dto.setProgress(0);
+        }
 
         return dto;
     }
