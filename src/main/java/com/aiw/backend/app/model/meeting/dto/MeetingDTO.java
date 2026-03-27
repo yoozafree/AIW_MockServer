@@ -27,6 +27,9 @@ public class MeetingDTO {
     private LocalDateTime endedAt;
 
     @NotNull
+    private Long projectId;
+
+    @NotNull
     @Size(max = 255)
     private String status;
 

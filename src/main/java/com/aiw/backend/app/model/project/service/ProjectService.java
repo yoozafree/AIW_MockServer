@@ -75,7 +75,7 @@ public class ProjectService {
 
         // 2. 실제 DB의 ActionItem 데이터를 가져와서 TodoDTO로 변환
         // (ActionItem 테이블에 meeting_id가 있고, meeting이 team_id를 가지므로 이를 활용)
-        List<ActionItem> actionItems = actionItemRepository.findByMeetingTeamId(project.getTeam().getId());
+        List<ActionItem> actionItems = actionItemRepository.findByMeetingProjectId(project.getTeam().getId());
 
         List<TodoDTO> todos = actionItems.stream()
                 .map(item -> {

@@ -1,6 +1,8 @@
 package com.aiw.backend.app.model.meeting.service;
 
 import com.aiw.backend.app.model.meeting.repository.MeetingRepository;
+import com.aiw.backend.app.model.project.domain.Project;
+import com.aiw.backend.app.model.project.repository.ProjectRepository;
 import com.aiw.backend.events.BeforeDeleteMeeting;
 import com.aiw.backend.app.model.meeting.domain.Meeting;
 import com.aiw.backend.app.model.meeting.dto.MeetingDTO;
@@ -17,11 +19,14 @@ import org.springframework.stereotype.Service;
 public class MeetingService {
 
     private final MeetingRepository meetingRepository;
+    private final ProjectRepository projectRepository;
     private final ApplicationEventPublisher publisher;
 
     public MeetingService(final MeetingRepository meetingRepository,
+                          final ProjectRepository projectRepository,
             final ApplicationEventPublisher publisher) {
         this.meetingRepository = meetingRepository;
+        this.projectRepository = projectRepository;
         this.publisher = publisher;
     }
 
@@ -41,6 +46,10 @@ public class MeetingService {
     public Long create(final MeetingDTO meetingDTO) {
         final Meeting meeting = new Meeting();
         mapToEntity(meetingDTO, meeting);
+        // 전달받은 projectId로 프로젝트를 찾아 연결
+        Project project = projectRepository.findById(meetingDTO.getProjectId())
+                .orElseThrow(() -> new NotFoundException("프로젝트를 찾을 수 없습니다."));
+        meeting.setProject(project);
         return meetingRepository.save(meeting).getId();
     }
 

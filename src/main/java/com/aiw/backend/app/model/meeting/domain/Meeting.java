@@ -1,12 +1,8 @@
 package com.aiw.backend.app.model.meeting.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.aiw.backend.app.model.project.domain.Project;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import lombok.Getter;
@@ -45,6 +41,10 @@ public class Meeting {
 
   @Column(nullable = false)
   private String createdType;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "project_id", nullable = false)
+  private Project project;
 
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)
   private Boolean activated;
