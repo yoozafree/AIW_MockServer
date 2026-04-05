@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -38,6 +39,22 @@ public class ActionItemService {
                 .toList();
     }
 
+    public List<ActionItemDTO> getActionItems(Long assigneeMemberId) {
+        List<ActionItem> actionItems;
+
+        if (assigneeMemberId != null) {
+            // 특정 멤버의 ActionItem 조회
+            actionItems = actionItemRepository.findByAssigneeMemberId(assigneeMemberId);
+        } else {
+            // 전체 조회
+            actionItems = actionItemRepository.findAll(Sort.by("id"));
+        }
+
+        return actionItems.stream()
+                .map(actionItem -> mapToDTO(actionItem, new ActionItemDTO()))
+                .toList();
+    }
+
     public ActionItemDTO get(final Long id) {
         return actionItemRepository.findById(id)
                 .map(actionItem -> mapToDTO(actionItem, new ActionItemDTO()))
@@ -50,11 +67,29 @@ public class ActionItemService {
         return actionItemRepository.save(actionItem).getId();
     }
 
-    public void update(final Long id, final ActionItemDTO actionItemDTO) {
+    @Transactional
+    public ActionItemDTO update(final Long id, final ActionItemDTO actionItemDTO) {
         final ActionItem actionItem = actionItemRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        mapToEntity(actionItemDTO, actionItem);
-        actionItemRepository.save(actionItem);
+
+        // 1. DTO에 담긴 정보로 엔티티 업데이트
+        actionItem.setTitle(actionItemDTO.getTitle());
+        actionItem.setCompleted(actionItemDTO.getCompleted());
+        actionItem.setMemo(actionItemDTO.getMemo());
+        actionItem.setPhase(actionItemDTO.getPhase()); // 기존 코드에 있던 필수 필드들도 매핑 유지
+        actionItem.setScope(actionItemDTO.getScope());
+        actionItem.setImage(actionItemDTO.getImage());
+
+        // 2. 담당자 변경
+        if (actionItemDTO.getAssigneeMember() != null) {
+            final Member newAssignee = memberRepository.findById(actionItemDTO.getAssigneeMember())
+                    .orElseThrow(() -> new NotFoundException("member not found"));
+            actionItem.setAssigneeMember(newAssignee);
+        }
+
+        // 3. 저장 및 반환
+        ActionItem updatedItem = actionItemRepository.save(actionItem);
+        return mapToDTO(updatedItem, new ActionItemDTO());
     }
 
     public void delete(final Long id) {
