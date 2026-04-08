@@ -40,9 +40,10 @@ public class MeetingController {
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createMeeting(@RequestBody @Valid final MeetingDTO meetingDTO) {
-        final Long createdId = meetingService.create(meetingDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+    public ResponseEntity<MeetingDTO> createMeeting(@RequestBody @Valid final MeetingDTO meetingDTO) {
+        //DTO 전체를 반환
+        final MeetingDTO createdMeeting = meetingService.create(meetingDTO);
+        return new ResponseEntity<>(createdMeeting, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

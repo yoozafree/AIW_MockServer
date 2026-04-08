@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface ActionItemRepository extends JpaRepository<ActionItem, Long> {
 
+  //Meeting 내의 Project ID로 ActionItem 리스트 조회
+  List<ActionItem> findByMeetingProjectId(Long projectId);
+
   ActionItem findFirstByMeeting_Id(Long id);
 
   ActionItem findFirstByAssigneeMemberId(Long id);

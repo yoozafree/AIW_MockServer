@@ -13,6 +13,7 @@ import java.util.Map;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -43,14 +44,21 @@ public class MeetingService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final MeetingDTO meetingDTO) {
+    @Transactional
+    public MeetingDTO create(final MeetingDTO meetingDTO) {
         final Meeting meeting = new Meeting();
         mapToEntity(meetingDTO, meeting);
-        // 전달받은 projectId로 프로젝트를 찾아 연결
+
+        // 프로젝트 연결 로직
         Project project = projectRepository.findById(meetingDTO.getProjectId())
                 .orElseThrow(() -> new NotFoundException("프로젝트를 찾을 수 없습니다."));
         meeting.setProject(project);
-        return meetingRepository.save(meeting).getId();
+
+        //DB에 저장
+        final Meeting savedMeeting = meetingRepository.save(meeting);
+
+        //저장된 엔티티를 다시 DTO로 변환하여 반환 (ID가 채워진 상태)
+        return mapToDTO(savedMeeting, new MeetingDTO());
     }
 
     public void update(final Long id, final MeetingDTO meetingDTO) {
