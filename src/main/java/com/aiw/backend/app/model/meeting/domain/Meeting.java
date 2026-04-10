@@ -49,10 +49,6 @@ public class Meeting {
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)
   private Boolean activated;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "project_id", nullable = false)
-  private Project project;
-
   @CreatedDate
   @Column(nullable = false, updatable = false)
   private OffsetDateTime createdAt;

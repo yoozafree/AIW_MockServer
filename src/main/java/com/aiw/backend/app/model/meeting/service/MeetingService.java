@@ -18,8 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -28,28 +28,29 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
 public class MeetingService {
 
-    private final MeetingRepository meetingRepository;
-    private final ProjectRepository projectRepository;
-    private final ApplicationEventPublisher publisher;
+  private final MeetingRepository meetingRepository;
+  private final ApplicationEventPublisher publisher;
 
-    public MeetingService(final MeetingRepository meetingRepository,
-                          final ProjectRepository projectRepository,
-            final ApplicationEventPublisher publisher) {
-        this.meetingRepository = meetingRepository;
-        this.projectRepository = projectRepository;
-        this.publisher = publisher;
-    }
+  private final ProjectRepository projectRepository;
 
-  public MeetingService(final MeetingRepository meetingRepository,
-      final ApplicationEventPublisher publisher) {
+  private final AtomicLong meetingSequence = new AtomicLong(1);
+  private final Map<Long, String> meetingStatusMap = new ConcurrentHashMap<>();
+
+  public MeetingService(
+      final MeetingRepository meetingRepository,
+      final ApplicationEventPublisher publisher,
+      final ProjectRepository projectRepository
+  ) {
     this.meetingRepository = meetingRepository;
     this.publisher = publisher;
+    this.projectRepository = projectRepository;
   }
 
   public List<ShowMeetingListResponse> getMeetingRecords() {
@@ -59,22 +60,26 @@ public class MeetingService {
     );
   }
 
-    @Transactional
-    public MeetingDTO create(final MeetingDTO meetingDTO) {
-        final Meeting meeting = new Meeting();
-        mapToEntity(meetingDTO, meeting);
+  @Transactional
+  public MeetingDTO create(final MeetingDTO meetingDTO) {
+    final Meeting meeting = new Meeting();
+    mapToEntity(meetingDTO, meeting);
 
-        // 프로젝트 연결 로직
-        Project project = projectRepository.findById(meetingDTO.getProjectId())
-                .orElseThrow(() -> new NotFoundException("프로젝트를 찾을 수 없습니다."));
-        meeting.setProject(project);
+    // 프로젝트 연결 로직
+    Project project = projectRepository.findById(meetingDTO.getProjectId())
+        .orElseThrow(() -> new NotFoundException("프로젝트를 찾을 수 없습니다."));
+    meeting.setProject(project);
 
-        //DB에 저장
-        final Meeting savedMeeting = meetingRepository.save(meeting);
+    //DB에 저장
+    final Meeting savedMeeting = meetingRepository.save(meeting);
 
-        //저장된 엔티티를 다시 DTO로 변환하여 반환 (ID가 채워진 상태)
-        return mapToDTO(savedMeeting, new MeetingDTO());
+    //저장된 엔티티를 다시 DTO로 변환하여 반환 (ID가 채워진 상태)
+    return mapToDTO(savedMeeting, new MeetingDTO());
     }
+  // 회의 생성
+  public CreateMeetingRecordResponse createMeeting(CreateMeetingRecordRequest request) {
+    Long meetingId = meetingSequence.getAndIncrement();
+    meetingStatusMap.put(meetingId, "PENDING");
 
     return new CreateMeetingRecordResponse(
         meetingId,
@@ -273,11 +278,11 @@ public class MeetingService {
         .orElseThrow(NotFoundException::new);
   }
 
-  public Long create(final MeetingDTO meetingDTO) {
-    final Meeting meeting = new Meeting();
-    mapToEntity(meetingDTO, meeting);
-    return meetingRepository.save(meeting).getId();
-  }
+//  public Long create(final MeetingDTO meetingDTO) {
+//    final Meeting meeting = new Meeting();
+//    mapToEntity(meetingDTO, meeting);
+//    return meetingRepository.save(meeting).getId();
+//  }
 
   public void update(final Long id, final MeetingDTO meetingDTO) {
     final Meeting meeting = meetingRepository.findById(id)

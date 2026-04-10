@@ -11,7 +11,11 @@ import com.aiw.backend.app.model.member.domain.Member;
 import com.aiw.backend.app.model.member.repository.MemberRepository;
 import com.aiw.backend.util.NotFoundException;
 import com.aiw.backend.util.ReferencedException;
+import jakarta.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -25,49 +29,123 @@ public class ActionItemService {
     private final MeetingRepository meetingRepository;
     private final MemberRepository memberRepository;
 
-    public ActionItemService(final ActionItemRepository actionItemRepository,
-            final MeetingRepository meetingRepository, final MemberRepository memberRepository) {
-        this.actionItemRepository = actionItemRepository;
-        this.meetingRepository = meetingRepository;
-        this.memberRepository = memberRepository;
+  public ActionItemService(final ActionItemRepository actionItemRepository,
+      final MeetingRepository meetingRepository, final MemberRepository memberRepository) {
+    this.actionItemRepository = actionItemRepository;
+    this.meetingRepository = meetingRepository;
+    this.memberRepository = memberRepository;
+  }
+
+  // ---------------------------
+  // mock 저장소 (단건조회 / 생성 / 삭제 용도)
+  // ---------------------------
+  private final Map<Long, ActionItemDTO> mockStorage = new LinkedHashMap<>();
+  private long sequence = 1L;
+
+  @PostConstruct
+  public void initMockStorage() {
+    if (!mockStorage.isEmpty()) {
+      return;
     }
 
-    public List<ActionItemDTO> findAll() {
-        final List<ActionItem> actionItems = actionItemRepository.findAll(Sort.by("id"));
-        return actionItems.stream()
-                .map(actionItem -> mapToDTO(actionItem, new ActionItemDTO()))
-                .toList();
+    ActionItemDTO item1 = new ActionItemDTO();
+    item1.setId(nextId());
+    item1.setTitle("액션아이템 단건 조회 테스트");
+    item1.setDueDate(LocalDateTime.of(2026, 4, 12, 14, 0));
+    item1.setCompleted(false);
+    item1.setMemo("mock 단건 조회용 데이터");
+    item1.setImage("test1.png");
+    item1.setPhase(1L);
+    item1.setScope("BACKEND");
+    item1.setActivated(true);
+    item1.setMeeting(1L);
+    item1.setAssigneeMember(1L);
+
+    ActionItemDTO item2 = new ActionItemDTO();
+    item2.setId(nextId());
+    item2.setTitle("액션아이템 생성/삭제 테스트");
+    item2.setDueDate(LocalDateTime.of(2026, 4, 13, 16, 0));
+    item2.setCompleted(false);
+    item2.setMemo("mock CRUD 테스트용 데이터");
+    item2.setImage("test2.png");
+    item2.setPhase(2L);
+    item2.setScope("FRONTEND");
+    item2.setActivated(true);
+    item2.setMeeting(2L);
+    item2.setAssigneeMember(2L);
+
+    mockStorage.put(item1.getId(), item1);
+    mockStorage.put(item2.getId(), item2);
+  }
+
+  private long nextId() {
+    return sequence++;
+  }
+
+  private ActionItemDTO copyDto(final ActionItemDTO source) {
+    final ActionItemDTO copied = new ActionItemDTO();
+    copied.setId(source.getId());
+    copied.setTitle(source.getTitle());
+    copied.setDueDate(source.getDueDate());
+    copied.setCompleted(source.getCompleted());
+    copied.setMemo(source.getMemo());
+    copied.setImage(source.getImage());
+    copied.setPhase(source.getPhase());
+    copied.setScope(source.getScope());
+    copied.setActivated(source.getActivated());
+    copied.setMeeting(source.getMeeting());
+    copied.setAssigneeMember(source.getAssigneeMember());
+    return copied;
+  }
+
+  // 민지님 부분
+  public List<ActionItemDTO> getActionItems(final Long assigneeMemberId) {
+    final List<ActionItem> actionItems;
+
+    if (assigneeMemberId != null) {
+      actionItems = actionItemRepository.findByAssigneeMemberId(assigneeMemberId);
+    } else {
+      actionItems = actionItemRepository.findAll(Sort.by("id"));
     }
 
-    public List<ActionItemDTO> getActionItems(Long assigneeMemberId) {
-        List<ActionItem> actionItems;
+    return actionItems.stream()
+        .map(actionItem -> mapToDTO(actionItem, new ActionItemDTO()))
+        .toList();
+  }
 
-        if (assigneeMemberId != null) {
-            // 특정 멤버의 ActionItem 조회
-            actionItems = actionItemRepository.findByAssigneeMemberId(assigneeMemberId);
-        } else {
-            // 전체 조회
-            actionItems = actionItemRepository.findAll(Sort.by("id"));
-        }
-
-        return actionItems.stream()
-                .map(actionItem -> mapToDTO(actionItem, new ActionItemDTO()))
-                .toList();
+  // 단건 조회
+  public ActionItemDTO get(final Long id) {
+    final ActionItemDTO item = mockStorage.get(id);
+    if (item == null) {
+      throw new NotFoundException("mock actionItem not found. id=" + id);
     }
+    return copyDto(item);
+  }
 
-    public ActionItemDTO get(final Long id) {
-        return actionItemRepository.findById(id)
-                .map(actionItem -> mapToDTO(actionItem, new ActionItemDTO()))
-                .orElseThrow(NotFoundException::new);
-    }
+  // ---------------------------
+  // mock 생성
+  // ---------------------------
+  public Long create(final ActionItemDTO actionItemDTO) {
+    final ActionItemDTO newItem = new ActionItemDTO();
+    newItem.setId(nextId());
+    newItem.setTitle(actionItemDTO.getTitle());
+    newItem.setDueDate(actionItemDTO.getDueDate());
+    newItem.setCompleted(actionItemDTO.getCompleted());
+    newItem.setMemo(actionItemDTO.getMemo());
+    newItem.setImage(actionItemDTO.getImage());
+    newItem.setPhase(actionItemDTO.getPhase());
+    newItem.setScope(actionItemDTO.getScope());
+    newItem.setActivated(actionItemDTO.getActivated());
+    newItem.setMeeting(actionItemDTO.getMeeting());
+    newItem.setAssigneeMember(actionItemDTO.getAssigneeMember());
 
-    public Long create(final ActionItemDTO actionItemDTO) {
-        final ActionItem actionItem = new ActionItem();
-        mapToEntity(actionItemDTO, actionItem);
-        return actionItemRepository.save(actionItem).getId();
-    }
+    mockStorage.put(newItem.getId(), newItem);
+    return newItem.getId();
+  }
 
-    @Transactional
+
+  // 민지님 부분
+  @Transactional
     public ActionItemDTO update(final Long id, final ActionItemDTO actionItemDTO) {
         final ActionItem actionItem = actionItemRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
@@ -92,11 +170,15 @@ public class ActionItemService {
         return mapToDTO(updatedItem, new ActionItemDTO());
     }
 
-    public void delete(final Long id) {
-        final ActionItem actionItem = actionItemRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        actionItemRepository.delete(actionItem);
+  // ---------------------------
+  // mock 삭제
+  // ---------------------------
+  public void delete(final Long id) {
+    final ActionItemDTO removedItem = mockStorage.remove(id);
+    if (removedItem == null) {
+      throw new NotFoundException("mock actionItem not found. id=" + id);
     }
+  }
 
     private ActionItemDTO mapToDTO(final ActionItem actionItem, final ActionItemDTO actionItemDTO) {
         actionItemDTO.setId(actionItem.getId());
