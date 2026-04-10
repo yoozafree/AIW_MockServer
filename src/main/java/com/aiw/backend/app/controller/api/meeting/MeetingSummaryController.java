@@ -18,47 +18,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
-@RequestMapping(value = "/api/meetingSummaries", produces = MediaType.APPLICATION_JSON_VALUE)
-public class MeetingSummaryController {
-
-    private final MeetingSummaryService meetingSummaryService;
-
-    public MeetingSummaryController(final MeetingSummaryService meetingSummaryService) {
-        this.meetingSummaryService = meetingSummaryService;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<MeetingSummaryDTO>> getAllMeetingSummaries() {
-        return ResponseEntity.ok(meetingSummaryService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<MeetingSummaryDTO> getMeetingSummary(
-            @PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(meetingSummaryService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createMeetingSummary(
-            @RequestBody @Valid final MeetingSummaryDTO meetingSummaryDTO) {
-        final Long createdId = meetingSummaryService.create(meetingSummaryDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Long> updateMeetingSummary(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final MeetingSummaryDTO meetingSummaryDTO) {
-        meetingSummaryService.update(id, meetingSummaryDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteMeetingSummary(@PathVariable(name = "id") final Long id) {
-        meetingSummaryService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-}
+//@RestController
+//@RequestMapping(value = "/api/meetingSummaries", produces = MediaType.APPLICATION_JSON_VALUE)
+//public class MeetingSummaryController {
+//
+//    private final MeetingSummaryService meetingSummaryService;
+//
+//    public MeetingSummaryController(final MeetingSummaryService meetingSummaryService) {
+//        this.meetingSummaryService = meetingSummaryService;
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<MeetingSummaryDTO>> getAllMeetingSummaries() {
+//        return ResponseEntity.ok(meetingSummaryService.findAll());
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<MeetingSummaryDTO> getMeetingSummary(
+//            @PathVariable(name = "id") final Long id) {
+//        return ResponseEntity.ok(meetingSummaryService.get(id));
+//    }
+//
+//    @PostMapping
+//    @ApiResponse(responseCode = "201")
+//    public ResponseEntity<Long> createMeetingSummary(
+//            @RequestBody @Valid final MeetingSummaryDTO meetingSummaryDTO) {
+//        final Long createdId = meetingSummaryService.create(meetingSummaryDTO);
+//        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Long> updateMeetingSummary(@PathVariable(name = "id") final Long id,
+//            @RequestBody @Valid final MeetingSummaryDTO meetingSummaryDTO) {
+//        meetingSummaryService.update(id, meetingSummaryDTO);
+//        return ResponseEntity.ok(id);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    @ApiResponse(responseCode = "204")
+//    public ResponseEntity<Void> deleteMeetingSummary(@PathVariable(name = "id") final Long id) {
+//        meetingSummaryService.delete(id);
+//        return ResponseEntity.noContent().build();
+//    }
+//
+//}

@@ -55,6 +55,9 @@ public class ActionItem {
   private String scope;
 
   @Column(nullable = false, columnDefinition = "tinyint", length = 1)
+  private Boolean isConfirmed;
+
+  @Column(nullable = false, columnDefinition = "tinyint", length = 1)
   private Boolean activated;
 
   @ManyToOne(fetch = FetchType.LAZY)

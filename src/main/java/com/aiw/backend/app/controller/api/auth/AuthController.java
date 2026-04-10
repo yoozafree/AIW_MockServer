@@ -16,6 +16,7 @@ import com.aiw.backend.infra.response.ApiResponse;
 import com.aiw.backend.infra.response.ResponseCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -40,6 +41,7 @@ public class AuthController {
 
   // 회원가입
   @PostMapping("/signup")
+  @Operation(summary = "회원가입")
   public ResponseEntity<ApiResponse<Void>> signup(@RequestBody @Valid SignupRequest request) {
     try {
       authService.signup(request);
@@ -66,6 +68,7 @@ public class AuthController {
 
   // 로그인
   @PostMapping("/login")
+  @Operation(summary = "로그인")
   public ResponseEntity<ApiResponse<TokenDto>> login(@RequestBody @Valid LoginRequest req,
       HttpServletResponse response) {
     TokenDto tokenDto = authService.signin(req);
@@ -86,6 +89,7 @@ public class AuthController {
 
   // 로그아웃
   @PostMapping("/logout")
+  @Operation(summary = "로그아웃")
   public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request, HttpServletResponse response) {
     String accessToken = jwtTokenProvider.resolveToken(request, AuthToken.ACCESS_TOKEN);
 
@@ -111,6 +115,7 @@ public class AuthController {
   }
 
   @PostMapping("/refresh")
+  @Operation(summary = "토큰 재발급")
   public ResponseEntity<ApiResponse<TokenDto>> refresh(HttpServletRequest request, HttpServletResponse response) {
     String accessToken = jwtTokenProvider.resolveToken(request, AuthToken.ACCESS_TOKEN);
     String refreshToken = jwtTokenProvider.resolveToken(request, AuthToken.REFRESH_TOKEN);

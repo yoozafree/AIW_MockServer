@@ -27,36 +27,40 @@ public class InviteController {
     public InviteController(final InviteService inviteService) {
         this.inviteService = inviteService;
     }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<InviteDTO> getInvite(@PathVariable(name = "id") final Long id) {
+//        return ResponseEntity.ok(inviteService.get(id));
+//    }
+//
+//    @PostMapping
+//    @ApiResponse(responseCode = "201")
+//    public ResponseEntity<Long> createInvite(@RequestBody @Valid final InviteDTO inviteDTO) {
+//        final Long createdId = inviteService.create(inviteDTO);
+//        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Long> updateInvite(@PathVariable(name = "id") final Long id,
+//            @RequestBody @Valid final InviteDTO inviteDTO) {
+//        inviteService.update(id, inviteDTO);
+//        return ResponseEntity.ok(id);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    @ApiResponse(responseCode = "204")
+//    public ResponseEntity<Void> deleteInvite(@PathVariable(name = "id") final Long id) {
+//        inviteService.delete(id);
+//        return ResponseEntity.noContent().build();
+//    }
 
-    @GetMapping
-    public ResponseEntity<List<InviteDTO>> getAllInvites() {
-        return ResponseEntity.ok(inviteService.findAll());
-    }
+//  @PostMapping("/join")
+//  public ResponseEntity<Void> joinByInviteCode(
+//      @RequestBody @Valid InviteJoinRequest request) {
+//    inviteService.joinByInviteCode(request);
+//    return ResponseEntity.ok().build();
+//  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<InviteDTO> getInvite(@PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(inviteService.get(id));
-    }
 
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createInvite(@RequestBody @Valid final InviteDTO inviteDTO) {
-        final Long createdId = inviteService.create(inviteDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Long> updateInvite(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final InviteDTO inviteDTO) {
-        inviteService.update(id, inviteDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteInvite(@PathVariable(name = "id") final Long id) {
-        inviteService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 
 }

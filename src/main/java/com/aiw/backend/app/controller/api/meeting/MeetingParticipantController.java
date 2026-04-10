@@ -18,47 +18,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
-@RequestMapping(value = "/api/meetingParticipants", produces = MediaType.APPLICATION_JSON_VALUE)
-public class MeetingParticipantController {
-
-    private final MeetingParticipantService meetingParticipantService;
-
-    public MeetingParticipantController(final MeetingParticipantService meetingParticipantService) {
-        this.meetingParticipantService = meetingParticipantService;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<MeetingParticipantDTO>> getAllMeetingParticipants() {
-        return ResponseEntity.ok(meetingParticipantService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<MeetingParticipantDTO> getMeetingParticipant(
-            @PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(meetingParticipantService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createMeetingParticipant(
-            @RequestBody @Valid final MeetingParticipantDTO meetingParticipantDTO) {
-        final Long createdId = meetingParticipantService.create(meetingParticipantDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Long> updateMeetingParticipant(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final MeetingParticipantDTO meetingParticipantDTO) {
-        meetingParticipantService.update(id, meetingParticipantDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteMeetingParticipant(@PathVariable(name = "id") final Long id) {
-        meetingParticipantService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-}
+//@RestController
+//@RequestMapping(value = "/api/meetingParticipants", produces = MediaType.APPLICATION_JSON_VALUE)
+//public class MeetingParticipantController {
+//
+//    private final MeetingParticipantService meetingParticipantService;
+//
+//    public MeetingParticipantController(final MeetingParticipantService meetingParticipantService) {
+//        this.meetingParticipantService = meetingParticipantService;
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<MeetingParticipantDTO>> getAllMeetingParticipants() {
+//        return ResponseEntity.ok(meetingParticipantService.findAll());
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<MeetingParticipantDTO> getMeetingParticipant(
+//            @PathVariable(name = "id") final Long id) {
+//        return ResponseEntity.ok(meetingParticipantService.get(id));
+//    }
+//
+//    @PostMapping
+//    @ApiResponse(responseCode = "201")
+//    public ResponseEntity<Long> createMeetingParticipant(
+//            @RequestBody @Valid final MeetingParticipantDTO meetingParticipantDTO) {
+//        final Long createdId = meetingParticipantService.create(meetingParticipantDTO);
+//        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Long> updateMeetingParticipant(@PathVariable(name = "id") final Long id,
+//            @RequestBody @Valid final MeetingParticipantDTO meetingParticipantDTO) {
+//        meetingParticipantService.update(id, meetingParticipantDTO);
+//        return ResponseEntity.ok(id);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    @ApiResponse(responseCode = "204")
+//    public ResponseEntity<Void> deleteMeetingParticipant(@PathVariable(name = "id") final Long id) {
+//        meetingParticipantService.delete(id);
+//        return ResponseEntity.noContent().build();
+//    }
+//
+//}

@@ -73,4 +73,7 @@ public class TeamController {
         return ResponseEntity.ok(teamService.leaveTeam(id, memberId, teamDTO.getDelegateMemberId()));
     }
 
+
+
+
 }

@@ -18,52 +18,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
-@RequestMapping(value = "/api/meetingSpeakerMaps", produces = MediaType.APPLICATION_JSON_VALUE)
-public class MeetingSpeakerMapController {
-
-  private final MeetingSpeakerMapService meetingSpeakerMapService;
-
-  public MeetingSpeakerMapController(final MeetingSpeakerMapService meetingSpeakerMapService) {
-    this.meetingSpeakerMapService = meetingSpeakerMapService;
-  }
-
-
-  @GetMapping
-  public ResponseEntity<List<MeetingSpeakerMapDTO>> getAllMeetingSpeakerMaps() {
-    return ResponseEntity.ok(meetingSpeakerMapService.findAll());
-  }
-
-  @GetMapping("/{id}")
-  public ResponseEntity<MeetingSpeakerMapDTO> getMeetingSpeakerMap(
-      @PathVariable(name = "id") final Long id) {
-    return ResponseEntity.ok(meetingSpeakerMapService.get(id));
-  }
-
-  @PostMapping
-  @ApiResponse(responseCode = "201")
-  public ResponseEntity<Long> createMeetingSpeakerMap(
-      @RequestBody @Valid final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
-
-    final Long createdId = meetingSpeakerMapService.create(meetingSpeakerMapDTO);
-    return new ResponseEntity<>('"' + createdId + '"', HttpStatus.CREATED);
-  }
-
-  @PutMapping("/{id}")
-  public ResponseEntity<Long> updateMeetingSpeakerMap(
-      @PathVariable(name = "id") final Long id,
-      @RequestBody @Valid final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
-
-    meetingSpeakerMapService.update(id, meetingSpeakerMapDTO);
-    return ResponseEntity.ok(id);
-  }
-
-  @DeleteMapping("/{id}")
-  @ApiResponse(responseCode = "204")
-  public ResponseEntity<Void> deleteMeetingSpeakerMap(
-      @PathVariable(name = "id") final Long id) {
-    meetingSpeakerMapService.delete(id);
-    return ResponseEntity.noContent().build();
-  }
-
-}
+//@RestController
+//@RequestMapping(value = "/api/meetingSpeakerMaps", produces = MediaType.APPLICATION_JSON_VALUE)
+//public class MeetingSpeakerMapController {
+//
+//  private final MeetingSpeakerMapService meetingSpeakerMapService;
+//
+//  public MeetingSpeakerMapController(final MeetingSpeakerMapService meetingSpeakerMapService) {
+//    this.meetingSpeakerMapService = meetingSpeakerMapService;
+//  }
+//
+//
+//  @GetMapping
+//  public ResponseEntity<List<MeetingSpeakerMapDTO>> getAllMeetingSpeakerMaps() {
+//    return ResponseEntity.ok(meetingSpeakerMapService.findAll());
+//  }
+//
+//  @GetMapping("/{id}")
+//  public ResponseEntity<MeetingSpeakerMapDTO> getMeetingSpeakerMap(
+//      @PathVariable(name = "id") final Long id) {
+//    return ResponseEntity.ok(meetingSpeakerMapService.get(id));
+//  }
+//
+//  @PostMapping
+//  @ApiResponse(responseCode = "201")
+//  public ResponseEntity<Long> createMeetingSpeakerMap(
+//      @RequestBody @Valid final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
+//
+//    final Long createdId = meetingSpeakerMapService.create(meetingSpeakerMapDTO);
+//    return new ResponseEntity<>('"' + createdId + '"', HttpStatus.CREATED);
+//  }
+//
+//  @PutMapping("/{id}")
+//  public ResponseEntity<Long> updateMeetingSpeakerMap(
+//      @PathVariable(name = "id") final Long id,
+//      @RequestBody @Valid final MeetingSpeakerMapDTO meetingSpeakerMapDTO) {
+//
+//    meetingSpeakerMapService.update(id, meetingSpeakerMapDTO);
+//    return ResponseEntity.ok(id);
+//  }
+//
+//  @DeleteMapping("/{id}")
+//  @ApiResponse(responseCode = "204")
+//  public ResponseEntity<Void> deleteMeetingSpeakerMap(
+//      @PathVariable(name = "id") final Long id) {
+//    meetingSpeakerMapService.delete(id);
+//    return ResponseEntity.noContent().build();
+//  }
+//
+//}

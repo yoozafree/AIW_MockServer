@@ -52,12 +52,21 @@ public class TeamService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    // 랜덤 코드 중복 가능성 때문에 해당 메서드 사용
+  private String generateInviteCode() {
+    String inviteCode;
+    do {
+      inviteCode = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+    } while (teamRepository.existsByInviteCode(inviteCode));
+    return inviteCode;
+  }
+
     @Transactional
     public TeamDTO create(final TeamDTO teamDTO) {
         // 1. 팀 엔티티 생성 및 기본 매핑
         final Team team = new Team();
         team.setName(teamDTO.getName());
-        team.setInviteCode(UUID.randomUUID().toString().substring(0, 8)); // 8자리 랜덤 코드
+        team.setInviteCode(generateInviteCode()); // 8자리 랜덤 코드
         team.setActivated(true);
 
         final Team savedTeam = teamRepository.save(team);
@@ -84,6 +93,7 @@ public class TeamService {
                 .inviteCode(savedTeam.getInviteCode())
                 .leaderId(creator.getId())
                 .leaderName(creator.getName())
+                .activated(savedTeam.getActivated())
                 .build();
     }
 
@@ -115,7 +125,9 @@ public class TeamService {
         TeamDTO response = new TeamDTO();
         response.setId(team.getId());
         response.setName(team.getName());
+        response.setInviteCode(team.getInviteCode());
         response.setMessage("팀 참여에 성공했습니다.");
+        response.setActivated(true);
         return response;
     }
 

@@ -1,25 +1,32 @@
 package com.aiw.backend.app.controller.api.meeting;
 
-import com.aiw.backend.app.model.meeting.dto.MeetingDTO;
+import com.aiw.backend.app.controller.api.meeting.payload.ShowActionItemResponse;
+import com.aiw.backend.app.controller.api.meeting.payload.CreateMeetingRecordResponse;
+import com.aiw.backend.app.controller.api.meeting.payload.CreateMeetingRecordRequest;
+import com.aiw.backend.app.controller.api.meeting.payload.ShowMeetingListResponse;
+import com.aiw.backend.app.controller.api.meeting.payload.ShowAISummaryResponse;
+import com.aiw.backend.app.controller.api.meeting.payload.ShowSttStatusResponse;
 import com.aiw.backend.app.model.meeting.service.MeetingService;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping(value = "/api/meetings", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/meetings", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MeetingController {
 
     private final MeetingService meetingService;
@@ -28,36 +35,66 @@ public class MeetingController {
         this.meetingService = meetingService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<MeetingDTO>> getAllMeetings() {
-        return ResponseEntity.ok(meetingService.findAll());
-    }
+  // 회의 리스트 조회
+  @GetMapping("/record")
+  @Operation(summary = "회의 리스트 조회")
+  public ResponseEntity<List<ShowMeetingListResponse>> getMeetingRecords() {
+    return ResponseEntity.ok(meetingService.getMeetingRecords());
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MeetingDTO> getMeeting(@PathVariable(name = "id") final Long id) {
-        return ResponseEntity.ok(meetingService.get(id));
-    }
+  // 회의 생성 (녹음)
+  @PostMapping("/record")
+  @Operation(summary = "회의 생성 (녹음)")
+  public ResponseEntity<CreateMeetingRecordResponse> createMeeting(
+      @RequestBody @Valid CreateMeetingRecordRequest request
+  ) {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(meetingService.createMeeting(request));
+  }
 
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<MeetingDTO> createMeeting(@RequestBody @Valid final MeetingDTO meetingDTO) {
-        //DTO 전체를 반환
-        final MeetingDTO createdMeeting = meetingService.create(meetingDTO);
-        return new ResponseEntity<>(createdMeeting, HttpStatus.CREATED);
-    }
+  // 회의 생성 (녹음 파일 업로드)
+  @PostMapping(value = "/record-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @Operation(summary = "회의 생성 (녹음 파일 업로드)")
+  public ResponseEntity<CreateMeetingRecordResponse> createMeetingByFile(
+      @RequestPart("file") MultipartFile file,
+      @ModelAttribute CreateMeetingRecordRequest request
+  ) {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(meetingService.createMeetingByFile(file, request));
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Long> updateMeeting(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final MeetingDTO meetingDTO) {
-        meetingService.update(id, meetingDTO);
-        return ResponseEntity.ok(id);
-    }
+  // STT 상태 조회
+  @GetMapping("/{meetingId}/stt/status")
+  @Operation(summary = "회의 STT 상태 조회")
+  public ResponseEntity<ShowSttStatusResponse> getSttStatus(
+      @PathVariable Long meetingId
+  ) {
+    return ResponseEntity.ok(meetingService.getSttStatus(meetingId));
+  }
 
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteMeeting(@PathVariable(name = "id") final Long id) {
-        meetingService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+  // STT 원본 파일 다운로드
+  @GetMapping("/{meetingId}/stt/download")
+  @Operation(summary = "회의 STT 원문 파일 다운로드")
+  public ResponseEntity<Resource> downloadMeetingStt(@PathVariable Long meetingId) {
+    return meetingService.downloadMeetingStt(meetingId);
+  }
+
+  // AI 요약 생성
+  @PostMapping("/{meetingId}/summary")
+  @Operation(summary = "회의 AI 요약 생성")
+  public ResponseEntity<ShowAISummaryResponse> createSummary(
+      @PathVariable Long meetingId
+  ) {
+    return ResponseEntity.ok(meetingService.createSummary(meetingId));
+  }
+
+  // 액션아이템 조회
+  @GetMapping("/{meetingId}/action-items")
+  @Operation(summary = "회의 요약 기반 액션아이템 조회")
+  public ResponseEntity<List<ShowActionItemResponse>> getActionItems(
+      @PathVariable Long meetingId
+  ) {
+    return ResponseEntity.ok(meetingService.getActionItems(meetingId));
+  }
 
 }

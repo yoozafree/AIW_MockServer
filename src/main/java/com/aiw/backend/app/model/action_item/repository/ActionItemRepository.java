@@ -20,4 +20,5 @@ public interface ActionItemRepository extends JpaRepository<ActionItem, Long> {
   List<ActionItem> findByAssigneeMemberIdAndDueDateBetween(Long memberId, LocalDateTime start, LocalDateTime end);
 
   List<ActionItem> findByAssigneeMemberId(Long assigneeMemberId);
+
 }
